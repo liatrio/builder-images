@@ -1,0 +1,5 @@
+skaffold.yaml
+Jenkinsfile
+test/
+Dockerfile
+.dockerignore
