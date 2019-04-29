@@ -1,7 +1,10 @@
 #FROM alpine:3.9
 FROM docker:18.09
 
-RUN apk add --no-cache curl
+RUN apk add --no-cache \
+		git \
+		curl \
+		openssh-client
 
 ENV SKAFFOLD_VERSION 0.27.0
 RUN curl -f -Lo skaffold https://github.com/GoogleCloudPlatform/skaffold/releases/download/v${SKAFFOLD_VERSION}/skaffold-linux-amd64 && \
