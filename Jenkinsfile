@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label "jenkins-jx-base"
+        label "lead-toolchain-skaffold"
     }
     environment {
       SKAFFOLD_DEFAULT_REPO = 'docker.artifactory.liatr.io/liatrio'
@@ -8,9 +8,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                container('jx-base') {
+                container('skaffold') {
                     script {
-                      docker.withRegistry("https://${SKAFFOLD_DEFAULT_REPO}", 'artifactory-credentials') {
+                      docker.withRegistry("https://${SKAFFOLD_DEFAULT_REPO}", 'jenkins-credential-artifactory') {
                           sh "make"
                       }
                     }
