@@ -11,15 +11,15 @@ pipeline {
       steps {
         container('skaffold') {
           script {
-            def tagHead = sh returnStdout: true, script: 'git tag -l --points-at HEAD v*.*.* | tail -1'
-            echo "Tag HEAD ${tagHead}"
-            if (!tagHead) {
-              def tagLast = sh returnStdout: true, script: 'git tag -l v*.*.*'
-              if (!tagLast) {
-                tagLast = 'v0.0.1'
+            def headTags = sh returnStdout: true, script: 'git tag -l --points-at HEAD --sort=creatordate v*.*.*'
+            echo "Tag HEAD ${headTags}"
+            if (!headTags) {
+              def tags = sh returnStdout: true, script: 'git tag -l v*.*.*'
+              if (!tags) {
+                tags = 'v0.0.1'
               }
-              echo "Tag last ${tagLast}"
-              def tagParts = tagLast.substring(1).split('.')
+              echo "Tags ${tags}"
+              def tagParts = tags.substring(tags.lastIndexOf("\n")).substring(1).split('.')
               echo "Tag parts ${tagParts[0]} ${tagParts[1]} ${tagParts[2]}"
               tag = "v${tagParts[0]}.${tagParts[1]}.${tagParts[2] + 1}"
               echo "Tag ${tag}"
