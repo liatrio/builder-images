@@ -11,20 +11,19 @@ pipeline {
       steps {
         container('skaffold') {
           script {
-            def tag
             def tagHead = sh returnStdout: true, script: 'git tag -l --points-at HEAD v*.*.* | tail -1'
             echo "Tag HEAD ${tagHead}"
-            if ('' == headTag) {
+            if (!headTag) {
               def tagLast = sh returnStdout: true, script: 'git tag -l v*.*.*'
+              if (tagLast == '')
               echo "Tag last ${tagLast}"
               def tagParts = tagLast.substring(1).split('.')
               echo "Tag parts ${tagParts[0]} ${tagParts[1]} ${tagParts[2]}"
               tag = "v${tagParts[0]}.${tagParts[1]}.${tagParts + 1}"
-            } else {
-              tag = tagHead
+              echo "Tag ${tag}"
+              sh "git tag -a -m 'releasing ${tag}' ${tag}"
+              sh "git push origin ${tag}"
             }
-            sh "git tag -a -m 'releasing ${tag}' ${tag}"
-            sh "git push origin ${tag}"
           }
         }
       }
