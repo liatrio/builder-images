@@ -13,9 +13,9 @@ pipeline {
           script {
             def tagHead = sh returnStdout: true, script: 'git tag -l --points-at HEAD v*.*.* | tail -1'
             echo "Tag HEAD ${tagHead}"
-            if (!headTag) {
+            if (!tagHead) {
               def tagLast = sh returnStdout: true, script: 'git tag -l v*.*.*'
-              if (tagLast == '')
+              if (!tagLast)
               echo "Tag last ${tagLast}"
               def tagParts = tagLast.substring(1).split('.')
               echo "Tag parts ${tagParts[0]} ${tagParts[1]} ${tagParts[2]}"
