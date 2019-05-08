@@ -7,7 +7,7 @@ pipeline {
   }
   stages {
     stage('Promote version') {
-      when { branch "master" }
+      //when { branch "master" }
       steps {
         container('skaffold') {
           script {
