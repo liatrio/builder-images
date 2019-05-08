@@ -19,7 +19,7 @@ pipeline {
               echo "Tag last ${tagLast}"
               def tagParts = tagLast.substring(1).split('.')
               echo "Tag parts ${tagParts[0]} ${tagParts[1]} ${tagParts[2]}"
-              tag = "v${tagParts[0]}.${tagParts[1]}.${tagParts + 1}"
+              tag = "v${tagParts[0]}.${tagParts[1]}.${tagParts[2] + 1}"
               echo "Tag ${tag}"
               sh "git tag -a -m 'releasing ${tag}' ${tag}"
               sh "git push origin ${tag}"
