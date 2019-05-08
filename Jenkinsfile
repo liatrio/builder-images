@@ -14,14 +14,17 @@ pipeline {
             def headTags = sh returnStdout: true, script: 'git tag -l --points-at HEAD --sort=creatordate v*.*.*'
             echo "Tag HEAD ${headTags}"
             if (!headTags) {
-              def tags = sh returnStdout: true, script: 'git tag -l v*.*.*'
-              if (!tags) {
-                tags = 'v0.0.1'
+              def tag
+              def tags = sh returnStdout: true, script: 'git tag -l --sort=creatordate v*.*.*'
+              if (tags) {
+                echo "Tags ${tags}"
+                def lastTag = tags.split("\n").pop()
+                def tagParts = lastTag.substring(1).split('.')
+                echo "Tag parts ${tagParts[0]} ${tagParts[1]} ${tagParts[2]}"
+                tag = "v${tagParts[0]}.${tagParts[1]}.${tagParts[2] + 1}"
+              } else {
+                tag = 'v0.0.1'
               }
-              echo "Tags ${tags}"
-              def tagParts = tags.substring(tags.lastIndexOf("\n")).substring(1).split('.')
-              echo "Tag parts ${tagParts[0]} ${tagParts[1]} ${tagParts[2]}"
-              tag = "v${tagParts[0]}.${tagParts[1]}.${tagParts[2] + 1}"
               echo "Tag ${tag}"
               sh "git tag -a -m 'releasing ${tag}' ${tag}"
               sh "git push origin ${tag}"
