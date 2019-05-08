@@ -15,7 +15,9 @@ pipeline {
             echo "Tag HEAD ${tagHead}"
             if (!tagHead) {
               def tagLast = sh returnStdout: true, script: 'git tag -l v*.*.*'
-              if (!tagLast)
+              if (!tagLast) {
+                tagLast = 'v0.0.1'
+              }
               echo "Tag last ${tagLast}"
               def tagParts = tagLast.substring(1).split('.')
               echo "Tag parts ${tagParts[0]} ${tagParts[1]} ${tagParts[2]}"
