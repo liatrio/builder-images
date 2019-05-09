@@ -4,7 +4,6 @@ pipeline {
   }
   environment {
     SKAFFOLD_DEFAULT_REPO = 'docker.artifactory.liatr.io/liatrio'
-    GIT_SSH = 'ChrisSchreiber'
   }
   stages {
     stage('Promote version') {
