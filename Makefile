@@ -1,7 +1,7 @@
 SUBDIRS := $(wildcard builder-image-*/.)
 SKAFFOLD_FLAGS :=
 
-LATEST_VERSION := $(shell git tag -l --sort=creatordate | grep "^v[0-9]*.[0-9]*.[0-9]*$" | tail -1 | cut -c 2-)
+LATEST_VERSION := $(shell git tag -l --sort=creatordate | grep "^v[0-9]*.[0-9]*.[0-9]*$$" | tail -1 | cut -c 2-)
 ifeq "$(shell git tag -l v$(LATEST_VERSION) --points-at HEAD)" "v$(LATEST_VERSION)"
 ### latest tag points to current commit, this is a release build
 VERSION ?= $(LATEST_VERSION)
