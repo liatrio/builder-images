@@ -25,6 +25,8 @@ pipeline {
                 tag = 'v0.0.1'
               }
               echo "Tag ${tag}"
+              sh "git config --global user.email 'jenkins@liatr.io'"
+              sh "git config --global user.name 'Liatrio Jenkins Automation'"
               sh "git tag -a -m 'releasing ${tag}' ${tag}"
               sh "git push origin ${tag}"
             }
