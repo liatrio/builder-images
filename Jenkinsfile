@@ -4,6 +4,7 @@ pipeline {
   }
   environment {
     SKAFFOLD_DEFAULT_REPO = 'docker.artifactory.liatr.io/liatrio'
+    GIT_SSH = 'ChrisSchreiber'
   }
   stages {
     stage('Promote version') {
@@ -28,9 +29,7 @@ pipeline {
               sh "git config --global user.email 'jenkins@liatr.io'"
               sh "git config --global user.name 'Liatrio Jenkins Automation'"
               sh "git tag -a -m 'releasing ${tag}' ${tag}"
-              sshagent(credentials : ['ChrisSchreiber']) {
-                sh "git push origin ${tag}"
-              }
+              sh "git push origin ${tag}"
             }
           }
         }
