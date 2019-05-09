@@ -20,7 +20,7 @@ pipeline {
                 echo "Tags ${tags}"
                 def tagParts = tags.split("\n")[-1].substring(1).split('\\.')
                 echo "Tag parts ${tagParts[0]} ${tagParts[1]} ${tagParts[2]}"
-                tag = "v${tagParts[0]}.${tagParts[1]}.${tagParts[2] + 1}"
+                tag = "v${tagParts[0]}.${tagParts[1]}.${tagParts[2].toInteger() + 1}"
               } else {
                 tag = 'v0.0.1'
               }
