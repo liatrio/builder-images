@@ -18,7 +18,7 @@ pipeline {
               def tags = sh returnStdout: true, script: 'git tag -l --sort=creatordate v*.*.*'
               if (tags) {
                 echo "Tags ${tags}"
-                def tagParts = tags.split("\n")[-1].substring(1).split('.')
+                def tagParts = tags.split("\n")[-1].substring(1).split('\\.')
                 echo "Tag parts ${tagParts[0]} ${tagParts[1]} ${tagParts[2]}"
                 tag = "v${tagParts[0]}.${tagParts[1]}.${tagParts[2] + 1}"
               } else {
