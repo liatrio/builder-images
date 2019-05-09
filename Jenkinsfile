@@ -28,6 +28,7 @@ pipeline {
               sh "git config --global user.email 'jenkins@liatr.io'"
               sh "git config --global user.name 'Liatrio Jenkins Automation'"
               sh "git tag -a -m 'releasing ${tag}' ${tag}"
+              sh "git push origin ${tag}"
             }
           }
         }
