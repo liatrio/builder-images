@@ -4,27 +4,19 @@ commandTests:
   - name: "terraform version"
     command: "terraform"
     args: ["version"]
-    expectedOutput: ["v0\\.29\\.0"]
+    expectedOutput: ["Terraform v0\\.10\\.0"]
     exitCode: 0
-  - name: "skaffold version"
-    command: "skaffold"
-    args: ["version"]
-    expectedOutput: ["v0\\.29\\.0"]
+  - name: "terragrunt version"
+    command: "terragrunt"
+    args: ["--version"]
+    expectedOutput: ["terragrunt version v0\\.18\\.6"]
     exitCode: 0
   - name: "container-structure-test version"
     command: "container-structure-test"
     args: ["version"]
     expectedOutput: ["v1\\.8\\.0"]
     exitCode: 0
-  - name: "docker version 18.09+"
-    command: "docker"
-    args: ["version"]
-    expectedOutput: ["18\\.09\\.\\d+"]
-    exitCode: 1
 fileExistenceTests:
-  - name: 'skaffold'
-    path: '/usr/bin/skaffold'
-    shouldExist: true
   - name: 'container-structure-test'
     path: '/usr/bin/container-structure-test'
     shouldExist: true
