@@ -8,7 +8,7 @@ RUN apk add --no-cache \
     openssh-client \
     make
 
-ENV TERRAFORM_VERSION 0.10.0
+ENV TERRAFORM_VERSION 0.11.14
 RUN curl -f -Lo terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
   unzip terraform.zip && \
   rm -f terraform.zip && \
