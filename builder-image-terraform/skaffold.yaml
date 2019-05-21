@@ -3,3 +3,7 @@ kind: Config
 build:
   artifacts:
     - image: builder-image-terraform
+test:
+  - image: builder-image-terraform
+    structureTests:
+      - ./test/*
