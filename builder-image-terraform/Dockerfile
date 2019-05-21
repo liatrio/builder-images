@@ -18,8 +18,3 @@ ENV TERRAGRUNT_VERSION 0.18.6
 RUN curl -f -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 && \
   chmod +x terragrunt && \
   mv terragrunt /usr/bin
-
-ENV CST_VERSION 1.8.0
-RUN curl -f -Lo container-structure-test https://storage.googleapis.com/container-structure-test/v${CST_VERSION}/container-structure-test-linux-amd64 && \
-  chmod +x container-structure-test && \
-  mv container-structure-test /usr/bin
