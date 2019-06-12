@@ -1,0 +1,8 @@
+schemaVersion: "2.0.0"
+
+commandTests:
+  - name: "aws"
+    command: "aws"
+    args: ["--version"]
+    expectedOutput: ["aws-cli/\\d+\\.\\d+\\.\\d+ Python/3.6.8 Linux/4.9.125-linuxkit botocore/1.12.167"]
+    exitCode: 0
