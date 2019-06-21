@@ -1,0 +1,9 @@
+apiVersion: skaffold/v1beta3
+kind: Config
+build:
+  artifacts:
+    - image: builder-image-maven
+test:
+  - image: builder-image-maven
+    structureTests:
+      - ./test/*
