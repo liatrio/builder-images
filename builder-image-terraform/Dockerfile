@@ -5,7 +5,15 @@ RUN apk add --no-cache \
     curl \
     unzip \
     openssh-client \
-    make
+    make \
+    musl-dev \
+    go
+
+# Configure Go
+ENV GOROOT /usr/lib/go
+ENV GOPATH /go
+ENV PATH /go/bin:$PATH
+RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 
 ENV TERRAFORM_VERSION 0.12.3
 RUN curl -f -Lo terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
