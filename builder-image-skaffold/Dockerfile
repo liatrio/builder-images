@@ -7,7 +7,7 @@ RUN apk add --no-cache \
 		openssh-client \
 		make
 
-ENV SKAFFOLD_VERSION 0.33.0
+ENV SKAFFOLD_VERSION 0.34.0
 RUN curl -f -Lo skaffold https://github.com/GoogleCloudPlatform/skaffold/releases/download/v${SKAFFOLD_VERSION}/skaffold-linux-amd64 && \
   chmod +x skaffold && \
   mv skaffold /usr/bin
