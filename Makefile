@@ -1,4 +1,3 @@
-SUBDIRS := $(wildcard builder-image-*/.)
 SKAFFOLD_FLAGS :=
 
 LATEST_VERSION := $(shell git tag -l --sort=creatordate | grep "^v[0-9]*.[0-9]*.[0-9]*$$" | tail -1 | cut -c 2-)
@@ -19,9 +18,8 @@ ifeq (, $(shell which container-structure-test))
 $(eval SKAFFOLD_FLAGS := --skip-tests)
 endif
 
-all: $(SUBDIRS)
-$(SUBDIRS):
-	cd $@ && skaffold build $(SKAFFOLD_FLAGS)
+all:
+	skaffold build $(SKAFFOLD_FLAGS)
 
 promote:
 	@echo "VERSION:$(VERSION) IS_SNAPSHOT:$(IS_SNAPSHOT) LATEST_VERSION:$(LATEST_VERSION)"
@@ -38,4 +36,4 @@ endif
 	git push origin $(NEW_VERSION)
 
 
-.PHONY: all promote $(SUBDIRS)
+.PHONY: all promote
