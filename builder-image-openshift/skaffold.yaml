@@ -1,9 +1,0 @@
-apiVersion: skaffold/v1beta3
-kind: Config
-build:
-  artifacts:
-    - image: builder-image-openshift
-test:
-  - image: builder-image-openshift
-    structureTests:
-      - ./test/*

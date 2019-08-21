@@ -1,9 +1,0 @@
-apiVersion: skaffold/v1beta3
-kind: Config
-build:
-  artifacts:
-    - image: builder-image-skaffold
-test:
-  - image: builder-image-skaffold
-    structureTests:
-      - ./test/*

@@ -14,4 +14,4 @@ This repo contains the source for builder images to be used as steps in CI/CD pi
    - Container for Jenkins that bakes in plugins
 
 ### Testing
-Each directory for an image contains an image structure test to confirm that it will build correctly using the [Google Container Structure Test](https://github.com/GoogleContainerTools/container-structure-test) and Skaffold. You can test the container by running `skaffold run`
+Each directory for an image contains an image structure test to confirm that it will build correctly using the [Google Container Structure Test](https://github.com/GoogleContainerTools/container-structure-test) and Skaffold. You can build and test all the containers by running `skaffold build` or `make`.
