@@ -36,4 +36,4 @@ endif
 	git push origin $(NEW_VERSION)
 
 
-#.PHONY: all promote $(SUBDIRS)
+.PHONY: all promote
