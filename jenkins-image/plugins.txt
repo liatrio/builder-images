@@ -11,4 +11,5 @@ workflow-scm-step:2.9
 kubernetes:1.15.6
 job-dsl:1.74
 blueocean:1.4.1
-
+configuration-as-code:1.19
+configuration-as-code-support:1.19
