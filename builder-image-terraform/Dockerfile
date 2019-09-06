@@ -50,4 +50,4 @@ RUN curl -f -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/d
 RUN addgroup -g 1000 jenkins && adduser -h /home/jenkins -G jenkins -u 1000 -D jenkins
 USER jenkins
 
-COPY --from=buildKeycloak /home/jenkins/terraform-provider-keycloak-master/terraform-provider-keycloak /home/jenkins/.terraform.d/plugins/
+COPY --from=buildKeycloak --chown=1000:1000 /home/jenkins/terraform-provider-keycloak-master/terraform-provider-keycloak /home/jenkins/.terraform.d/plugins/
