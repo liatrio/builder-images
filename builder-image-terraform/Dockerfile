@@ -1,4 +1,22 @@
+FROM alpine:3.9 AS buildKeycloak
+
+RUN apk add \
+    git \
+    go \
+    libc-dev \
+    make
+
+RUN wget https://github.com/mrparkers/terraform-provider-keycloak/archive/master.zip -O - | unzip -
+
+# the 2nd line is a temporary fix because git.apache.org is gone. see https://github.com/mrparkers/terraform-provider-keycloak/pull/150
+RUN	cd ./terraform-provider-keycloak-master \
+    && echo "replace git.apache.org/thrift.git => github.com/apache/thrift v0.0.0-20180902110319-2566ecd5d999" >> go.mod \
+    && GO111MODULE=on go mod download \
+    && make build
+
 FROM alpine:3.9
+
+COPY --from=buildKeycloak ./terraform-provider-keycloak-master/terraform-provider-keycloak /root/.terraform.d/plugins/
 
 RUN apk add --no-cache \
     git \

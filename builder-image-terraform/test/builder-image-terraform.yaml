@@ -11,3 +11,12 @@ commandTests:
     args: ["--version"]
     expectedOutput: ["terragrunt version v0\\.19\\.8"]
     exitCode: 0
+
+fileExistenceTests:
+  - name: 'keycloak plugin'
+    path: '/root/.terraform.d/plugins/terraform-provider-keycloak'
+    shouldExist: true
+    permissions: '-rwxr-xr-x'
+    uid: 0
+    gid: 0
+    isExecutableBy: 'any'
