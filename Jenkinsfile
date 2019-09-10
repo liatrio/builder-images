@@ -1,19 +1,25 @@
+library 'LEAD'
+
 pipeline {
   agent {
     label "lead-toolchain-skaffold"
   }
-  environment {
-    SKAFFOLD_DEFAULT_REPO = 'docker.artifactory.liatr.io/liatrio'
-  }
   stages {
     stage('Build & publish container') {
       steps {
+        notifyPipelineStart()
+        notifyStageStart()
         container('skaffold') {
-          script {
-            docker.withRegistry("https://${SKAFFOLD_DEFAULT_REPO}", 'jenkins-credential-artifactory') {
-              sh "make"
+          sh "make all"
+            script {
+              def version = sh ( script: "make version", returnStdout: true).trim()
+              notifyStageEnd([status: "Published new charts: ${version}"])
             }
-          }
+        }
+      }
+      post {
+        failure {
+          notifyStageEnd([result: "fail"])
         }
       }
     }

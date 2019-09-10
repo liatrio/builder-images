@@ -1,3 +1,5 @@
+export SKAFFOLD_DEFAULT_REPO?=artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio-dev
+
 SKAFFOLD_FLAGS :=
 
 LATEST_VERSION := $(shell git tag -l --sort=creatordate | grep "^v[0-9]*.[0-9]*.[0-9]*$$" | tail -1 | cut -c 2-)
@@ -17,6 +19,9 @@ TAG_VERSION = v$(VERSION)
 ifeq (, $(shell which container-structure-test))
 $(eval SKAFFOLD_FLAGS := --skip-tests)
 endif
+
+version:
+	@echo "$(VERSION)"
 
 all:
 	skaffold build $(SKAFFOLD_FLAGS)
