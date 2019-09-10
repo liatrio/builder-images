@@ -5,7 +5,7 @@ pipeline {
     label "lead-toolchain-skaffold"
   }
   stages {
-    stage('Build & publish container') {
+    stage('Build & publish images') {
       steps {
         notifyPipelineStart()
         notifyStageStart()
@@ -13,7 +13,7 @@ pipeline {
           sh "make all"
             script {
               def version = sh ( script: "make version", returnStdout: true).trim()
-              notifyStageEnd([status: "Published new charts: ${version}"])
+              notifyStageEnd([status: "Published new images: ${version}"])
             }
         }
       }
