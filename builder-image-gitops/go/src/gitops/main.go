@@ -36,7 +36,7 @@ func main() {
 	r, err := git.PlainClone("/repo", false, &git.CloneOptions{
 		Auth: &http.BasicAuth{
 			Username: "ChrisSchreiber",
-			Password: "70b48ef4167ded94f1313fc4a29074f6101e55d3",
+			Password: "xxxx",
 		},
 		URL:      "https://github.com/liatrio/lead-environments.git",
 		Progress: os.Stdout,
