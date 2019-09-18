@@ -15,7 +15,10 @@ RUN go install gitops
 FROM alpine
 
 RUN addgroup -S gitops && adduser -S gitops -G gitops
+USER gitops
 
 COPY --from=build /go/bin /go/bin
+
+WORKDIR /home/gitops
 
 ENTRYPOINT [ "/go/bin/gitops" ]
