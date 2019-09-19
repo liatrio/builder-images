@@ -1,14 +1,16 @@
 package main
 
 import (
-	"gopkg.in/src-d/go-git.v4/plumbing/transport"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"reflect"
-	"flag"
+	"strings"
+	"path/filepath"
 
 	"gopkg.in/src-d/go-git.v4"
+	"gopkg.in/src-d/go-git.v4/plumbing/transport"
 	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
 
 	"github.com/davecgh/go-spew/spew"
@@ -31,10 +33,10 @@ func Info(format string, args ...interface{}) {
 }
 
 func gitClone(url string, auth transport.AuthMethod, path string) (*git.Repository, error) {
+	fmt.Printf("Cloning git repo %s\n", url)
 	return git.PlainClone(path, false, &git.CloneOptions{
-		Auth: 		auth,
+		Auth:     auth,
 		URL:      url,
-		Progress: os.Stdout,
 	})
 }
 
@@ -46,8 +48,35 @@ func gitPush() {
 
 }
 
-func decodeHcl() {
+func parseFile(basePath string, repoFile string) (map[string]interface{}, error) {
+	path := basePath + repoFile
+	ext := filepath.Ext(repoFile)
 
+	fmt.Printf("Parsing file %s\n", path)
+
+	contents, err := ioutil.ReadFile(path)
+	if (err != nil) {
+		return nil, err
+	}
+	switch ext {
+	case ".hcl":
+		return decodeHcl(string(contents))
+	default:
+		return nil, fmt.Errorf("Unhandled file type '%s' for file '%s'", ext, repoFile)
+	}
+}
+
+func decodeHcl(hclString string) (map[string]interface{}, error) {
+	hclObj := make(map[string]interface{})
+
+	fmt.Println("Decoding HCL data")
+
+	err := hcl.Decode(&hclObj, hclString)
+	if (err != nil) {
+		return nil, err
+	}
+
+	return hclObj, nil
 }
 
 func encodeHcl() {
@@ -57,7 +86,6 @@ func encodeHcl() {
 func setValueInMap(target interface{}, path []string, value interface{}) error {
 	if reflect.TypeOf(target).Kind() == reflect.Slice {
 		for _, refSlice := range target.([]map[string]interface{}) {
-			fmt.Printf("T: %T\n", refSlice)
 			setValueInMap(refSlice, path, value)
 		}
 		return nil
@@ -72,7 +100,7 @@ func setValueInMap(target interface{}, path []string, value interface{}) error {
 	}
 
 	if len(path) == 1 {
-		fmt.Printf("Replace %s with %s\n", target.(map[string]interface{})[path[0]], value)
+		fmt.Printf("Update value %s: %s -> %s\n",path[0], target.(map[string]interface{})[path[0]], value)
 		target.(map[string]interface{})[path[0]] = value
 	} else {
 		setValueInMap(target.(map[string]interface{})[path[0]], path[1:], value)
@@ -81,31 +109,95 @@ func setValueInMap(target interface{}, path []string, value interface{}) error {
 	return nil
 }
 
-func main() {
-	gitURL := flag.String("gitUrl", os.Getenv("gitUrl"), "URL of git repository")
-	gitAuthUsername := flag.String("gitAuthUsername", os.Getenv("gitAuthUsername"), "Username to authenticate with git")
-	gitAuthPassword := flag.String("gitAuthPassword", os.Getenv("gitAuthPassword"), "Password or token to authenticate with git")
-	repoPath := "/home/gitops/repo"
+type valuePath struct {
+	path []string
+	value interface{}
+}
 
-	fmt.Printf("Start GitOps (git URL: %s, git auth user: %s, git auth password %s)", *gitURL, *gitAuthU)
+func parseValues(values string) ([]valuePath, error) {
+	items := strings.Split(values, ":")
+	valueMapList := make([]valuePath, len(items))
+	for index, item := range items {
+		keyvalue := strings.Split(item, "=")
+		valueMapList[index] = valuePath{strings.Split(keyvalue[0], "."), keyvalue[1]}
+	}
+	return valueMapList, nil
+}
+
+func usage(message string) {
+	if (message != "") {
+		fmt.Println(message)
+	}
+	flag.Usage()
+	os.Exit(1)
+}
+
+func main() {
+	gitURL := flag.String(
+		"gitUrl", 
+		os.Getenv("GITOPS_GIT_URL"), 
+		"URL of git repository. Can also use GITOPS_GIT_URL environment variable")
+	gitUsername := flag.String(
+		"gitUsername", 
+		os.Getenv("GITOPS_GIT_USERNAME"), 
+		"Username to authenticate with git. Can also useGITOPS_GIT_USERNAME environment variable ")
+	gitAuthPassword := flag.String(
+		"gitPassword", 
+		os.Getenv("GITOPS_GIT_PASSWORD"), 
+		"Password or token to authenticate with git. Can also use GITOPS_GIT_PASSWORD environment variable")
+	repoPath := "/home/gitops/repo/"
+	repoFile := flag.String(
+		"repoFile", 
+		os.Getenv("GITOPS_REPO_FILE"), 
+		"File in git repo to apply changes to. Can also use GITOPS_REPO_FILE environment variable")
+	values := flag.String(
+		"values", 
+		os.Getenv("GITOPS_VALUES"), 
+		"List of variables and coresponding values to update. Variables paths are a list of keys separated with periods. Each variable is separated with a colon. Example '-values=input.one=foo:input.two=bar'. Can also use GITOPS_VALUES environment variable")
+
+	flag.Parse()
+
+	fmt.Println("Start GitOps")
+
+	if (*gitURL == "") {
+		usage("ERROR: Git URL is required!")
+	}
+
+	if (*gitUsername == "") {
+		usage("ERROR: Git username is required!")
+	}
+
+	if (*gitAuthPassword == "") {
+		usage("ERROR: Git password is required!")
+	}
+
+	if *repoFile == "" {
+		usage("ERROR: File is required!")
+	}
+
+	if *values == "" {
+		usage("ERROR: Values are required!")
+	}
+	valuePaths, err := parseValues(*values)
+	if (err != nil) {
+		usage("ERROR: Could not parse values")
+	}
 
 	gitAuth := &http.BasicAuth{
-		Username: *gitAuthUsername,
+		Username: *gitUsername,
 		Password: *gitAuthPassword,
 	}
 
-	_, err := gitClone(*gitURL, gitAuth, repoPath)
+	_, err = gitClone(*gitURL, gitAuth, repoPath)
 	CheckIfError(err)
 
-	data, err := ioutil.ReadFile("/home/gitops/repo/aws/liatrio-sandbox/terragrunt.hcl")
-
-	hclout := make(map[string]interface{})
-
-	err = hcl.Decode(&hclout, string(data))
+	content, err := parseFile(repoPath, *repoFile)
 	CheckIfError(err)
 
-	err = setValueInMap(hclout, []string{"inputs", "sdm_version"}, "v100000.0.0")
-	CheckIfError(err)
+	for _, value := range valuePaths {
+		err = setValueInMap(content, value.path, value.value)
+		CheckIfError(err)	
+	}
 
-	fmt.Println("SPEW\n", spew.Sdump(hclout))
+	fmt.Println("SPEW\n", spew.Sdump(content))
 }
