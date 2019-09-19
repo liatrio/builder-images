@@ -35,14 +35,14 @@ ENV GOPATH /go
 ENV PATH /go/bin:$PATH
 RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 
-ENV TERRAFORM_VERSION 0.12.3
+ENV TERRAFORM_VERSION 0.12.9
 RUN curl -f -Lo terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
   unzip terraform.zip && \
   rm -f terraform.zip && \
   chmod +x terraform && \
   mv terraform /usr/bin
 
-ENV TERRAGRUNT_VERSION 0.19.8
+ENV TERRAGRUNT_VERSION 0.19.25
 RUN curl -f -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 && \
   chmod +x terragrunt && \
   mv terragrunt /usr/bin
