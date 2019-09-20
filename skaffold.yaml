@@ -12,6 +12,8 @@ build:
     context: ./builder-image-skaffold
   - image: builder-image-terraform
     context: ./builder-image-terraform
+  - image: builder-image-gitops
+    context: ./builder-image-gitops
   - image: jenkins-image
     context: ./jenkins-image
 
