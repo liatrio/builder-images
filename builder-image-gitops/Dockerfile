@@ -5,7 +5,7 @@ RUN apk add git
 RUN addgroup -S gitops && adduser -S gitops -G gitops
 USER gitops
 
-RUN go get gopkg.in/src-d/go-git.v4/... github.com/hashicorp/hcl github.com/davecgh/go-spew/spew
+RUN go get gopkg.in/src-d/go-git.v4/... github.com/hashicorp/hcl golang.org/x/oauth2 github.com/google/go-github/github
 
 COPY --chown=gitops:gitops ./go /go
 WORKDIR /go
