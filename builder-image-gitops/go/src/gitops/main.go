@@ -1,24 +1,29 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"net/url"
 	"os"
 	"path"
-	"reflect"
 	"strings"
 	"time"
+	"net/http"
 
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
 	"gopkg.in/src-d/go-git.v4/plumbing/transport"
-	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
+	githttp "gopkg.in/src-d/go-git.v4/plumbing/transport/http"
 
 	"github.com/hashicorp/hcl"
 	"github.com/hashicorp/hcl/hcl/ast"
 	"github.com/hashicorp/hcl/hcl/printer"
+
+	"github.com/google/go-github/github"
+	"golang.org/x/oauth2"
 )
 
 // CheckIfError should be used to naively panics if an error is not nil.
@@ -31,11 +36,6 @@ func CheckIfError(err error) {
 	os.Exit(1)
 }
 
-// Info should be used to describe the example commands that are about to run.
-func Info(format string, args ...interface{}) {
-	fmt.Printf("\x1b[34;1m%s\x1b[0m\n", fmt.Sprintf(format, args...))
-}
-
 func gitClone(url string, auth transport.AuthMethod, repoPath string) (*git.Repository, error) {
 	fmt.Printf("Cloning git repo %s\n", url)
 	return git.PlainClone(repoPath, false, &git.CloneOptions{
@@ -44,14 +44,16 @@ func gitClone(url string, auth transport.AuthMethod, repoPath string) (*git.Repo
 	})
 }
 
-func gitBranch(repo *git.Repository) (worktree *git.Worktree, err error) {
+func gitBranch(repo *git.Repository) (branch *plumbing.Reference, worktree *git.Worktree, err error) {
 	name := fmt.Sprintf("gitops-%x", time.Now().Unix())
 	fmt.Printf("Create branch %s\n", name)
 
-	head, err := repo.Head();
-	if (err != nil) { return }
+	head, err := repo.Head()
+	if err != nil {
+		return
+	}
 
-	branch := plumbing.NewHashReference(plumbing.NewBranchReferenceName(name), head.Hash())
+	branch = plumbing.NewHashReference(plumbing.NewBranchReferenceName(name), head.Hash())
 
 	err = repo.Storer.SetReference(branch)
 
@@ -67,7 +69,9 @@ func gitBranch(repo *git.Repository) (worktree *git.Worktree, err error) {
 func gitCommit(worktree *git.Worktree, file string) (err error) {
 	fmt.Printf("Add changes to repo %s\n", file)
 	_, err = worktree.Add(file)
-	if err != nil { return }
+	if err != nil {
+		return
+	}
 
 	fmt.Println("Commiting changes")
 	worktree.Commit(fmt.Sprintf("GitOps: Update %s", file), &git.CommitOptions{
@@ -86,6 +90,23 @@ func gitPush(repo *git.Repository, auth transport.AuthMethod) (err error) {
 	err = repo.Push(&git.PushOptions{
 		Auth: auth,
 	})
+	return
+}
+
+func githubPullRequest(httpClient *http.Client, org string, repo string, branch *plumbing.Reference) (pullRequest *github.PullRequest, err error) {
+	fmt.Printf("Create pull request for branch %s\n", branch.Name().Short())
+	client := github.NewClient(httpClient)
+
+	newPR := &github.NewPullRequest{
+		Title:               github.String("GitOps"),
+		Head:                github.String(branch.Name().Short()),
+		Base:                github.String("master"),
+		Body:                github.String("This pull request was automatically generated https://github.com/liatrio/builder-images/tree/master/builder-image-gitops"),
+		MaintainerCanModify: github.Bool(true),
+	}
+
+	pullRequest, _, err = client.PullRequests.Create(context.Background(), org, repo, newPR)
+
 	return
 }
 
@@ -123,51 +144,15 @@ func updateFile(filePath string, data *ast.File) (err error) {
 	switch ext {
 	case ".hcl":
 		file, err := os.Create(filePath)
-		if err != nil { return err }
+		if err != nil {
+			return err
+		}
 		defer file.Close()
 		err = printer.Fprint(file, data.Node)
 	default:
 		err = fmt.Errorf("Unhandeld file extension for %s", filePath)
 	}
 	return
-}
-
-// func encodeHcl(data ast.File) ([]byte, error) {
-
-// 	var raw bytes.Buffer
-
-// 	for index, item := range data {
-// 		fmt.Println("index:", index)
-// 		fmt.Printf("item: (%s,%s) %v\n", reflect.TypeOf(item).Kind(), reflect.TypeOf(item).String(), item)
-// 		switch reflect.TypeOf(item).Kind() {
-// 		case reflect.Slice:
-// 			itemBody, err := encodeHclSlice(item.([]map[string]interface{}))
-// 			if err != nil {
-// 				return nil, err
-// 			}
-// 			raw.WriteString(fmt.Sprintf("%s {\n%s\n}\n", index, itemBody))
-// 		case reflect.String:
-// 			raw.WriteString(fmt.Sprintf("%s = \"%s\"\n", index, item))
-// 		default:
-// 			return nil, fmt.Errorf("Unhandeld type %T", item)
-// 		}
-// 	}
-// 	// 	line =
-// 	// 	raw = append(raw, item.([]byte))
-// 	// }
-// 	// return printer.Format(data.([]byte))
-// 	fmt.Println("OUTPUT:\n", raw.String())
-// 	return raw.Bytes(), nil
-// }
-
-func encodeHclSlice(data []map[string]interface{}) ([]byte, error) {
-
-	raw := make([]byte, 0)
-	for index, item := range data {
-		fmt.Println("--index:", index)
-		fmt.Printf("--item: (%s,%s) %v\n", reflect.TypeOf(item).Kind(), reflect.TypeOf(item).String(), item)
-	}
-	return raw, nil
 }
 
 func setValueInAst(target ast.File, path []string, value interface{}) error {
@@ -179,7 +164,7 @@ func setValueInAst(target ast.File, path []string, value interface{}) error {
 				if key.Token.Type.IsIdentifier() && key.Token.Text == path[0] {
 					if len(path) == 1 {
 						if val, ok := item.Val.(*ast.LiteralType); ok {
-							fmt.Printf("Changed value %s -> %s\n", item.Val.(*ast.LiteralType).Token.Text, value)
+							fmt.Printf("Changed value %s -> \"%s\"\n", item.Val.(*ast.LiteralType).Token.Text, value)
 							val.Token.Text = fmt.Sprintf("\"%s\"", value)
 							matched = true
 						} else {
@@ -202,8 +187,8 @@ func setValueInAst(target ast.File, path []string, value interface{}) error {
 }
 
 type valuePath struct {
-	path []string
-	value    interface{}
+	path  []string
+	value interface{}
 }
 
 func parseValues(values string) ([]valuePath, error) {
@@ -233,7 +218,7 @@ func main() {
 		"gitUsername",
 		os.Getenv("GITOPS_GIT_USERNAME"),
 		"Username to authenticate with git. Can also useGITOPS_GIT_USERNAME environment variable ")
-	gitAuthPassword := flag.String(
+	gitPassword := flag.String(
 		"gitPassword",
 		os.Getenv("GITOPS_GIT_PASSWORD"),
 		"Password or token to authenticate with git. Can also use GITOPS_GIT_PASSWORD environment variable")
@@ -261,7 +246,7 @@ func main() {
 		usage("ERROR: Git username is required!")
 	}
 
-	if *gitAuthPassword == "" {
+	if *gitPassword == "" {
 		usage("ERROR: Git password is required!")
 	}
 
@@ -277,15 +262,15 @@ func main() {
 		usage("ERROR: Could not parse values")
 	}
 
-	gitAuth := &http.BasicAuth{
+	gitAuth := &githttp.BasicAuth{
 		Username: *gitUsername,
-		Password: *gitAuthPassword,
+		Password: *gitPassword,
 	}
 
 	repo, err := gitClone(*gitURL, gitAuth, repoPath)
 	CheckIfError(err)
 
-	worktree, err := gitBranch(repo)
+	branch, worktree, err := gitBranch(repo)
 	CheckIfError(err)
 
 	ast, err := parseFile(filePath)
@@ -302,9 +287,21 @@ func main() {
 	err = gitCommit(worktree, *repoFile)
 	CheckIfError(err)
 
-	// err = gitPush(repo, gitAuth)
-	// CheckIfError(err)
+	err = gitPush(repo, gitAuth)
+	CheckIfError(err)
 
-	file, _ := ioutil.ReadFile(filePath)
-	fmt.Println("OUTPUT:\n", string(file))
+	gitURLParts, err := url.Parse(*gitURL)
+	CheckIfError(err)
+
+	if gitURLParts.Host == "github.com" {
+		tokenSource := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: *gitPassword})
+		tokenClient := oauth2.NewClient(context.Background(), tokenSource)
+
+		pathParts := strings.Split(strings.TrimSuffix(gitURLParts.Path, ".git"), "/")
+
+		pullRequest, err := githubPullRequest(tokenClient, pathParts[1], pathParts[2], branch)
+		CheckIfError(err)
+
+		fmt.Printf("Pull Request created: %s\n", pullRequest.GetHTMLURL())
+	}
 }
