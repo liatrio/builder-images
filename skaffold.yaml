@@ -2,38 +2,38 @@ apiVersion: skaffold/v1beta13
 kind: Config
 build:
   artifacts:
-  - image: builder-image-aws
-    context: ./builder-image-aws
-  - image: builder-image-maven
-    context: ./builder-image-maven
-  - image: builder-image-openshift
-    context: ./builder-image-openshift
-  - image: builder-image-skaffold
-    context: ./builder-image-skaffold
-  - image: builder-image-terraform
-    context: ./builder-image-terraform
+  # - image: builder-image-aws
+  #   context: ./builder-image-aws
+  # - image: builder-image-maven
+  #   context: ./builder-image-maven
+  # - image: builder-image-openshift
+  #   context: ./builder-image-openshift
+  # - image: builder-image-skaffold
+  #   context: ./builder-image-skaffold
+  # - image: builder-image-terraform
+  #   context: ./builder-image-terraform
   - image: builder-image-gitops
     context: ./builder-image-gitops
-  - image: jenkins-image
-    context: ./jenkins-image
+  # - image: jenkins-image
+  #   context: ./jenkins-image
 
 test:
-- image: builder-image-aws
-  structureTests:
-  - ./builder-image-aws/test/*
-- image: builder-image-maven
-  structureTests:
-  - ./builder-image-maven/test/*
-- image: builder-image-aws
-  structureTests:
-  - ./builder-image-aws/test/*
-- image: builder-image-openshift
-  structureTests:
-  - ./builder-image-openshift/test/*
-- image: builder-image-skaffold
-  structureTests:
-  - ./builder-image-skaffold/test/*
-- image: builder-image-terraform
-  structureTests:
-  - ./builder-image-terraform/test/*
+# - image: builder-image-aws
+#   structureTests:
+#   - ./builder-image-aws/test/*
+# - image: builder-image-maven
+#   structureTests:
+#   - ./builder-image-maven/test/*
+# - image: builder-image-aws
+#   structureTests:
+#   - ./builder-image-aws/test/*
+# - image: builder-image-openshift
+#   structureTests:
+#   - ./builder-image-openshift/test/*
+# - image: builder-image-skaffold
+#   structureTests:
+#   - ./builder-image-skaffold/test/*
+# - image: builder-image-terraform
+#   structureTests:
+#   - ./builder-image-terraform/test/*
 

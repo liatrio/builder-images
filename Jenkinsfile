@@ -8,7 +8,7 @@ pipeline {
     VERSION = version()
     GITOPS_GIT_URL = 'git@github.com:liatrio/lead-environments.git'
     GITOPS_REPO_FILE = 'aws/liatrio-sandbox/terragrunt.hcl'
-    GITOPS_VALUES = 'inputs.builder_images_version=${VERSION}:inputs.jenkins_image_version${VERSION}'
+    GITOPS_VALUES = 'inputs.builder_images_version=${VERSION}:inputs.jenkins_image_version=${VERSION}'
     GITOPS_GIT_USERNAME = ''
     GITOPS_GIT_PASSWORD = ''
 
@@ -20,10 +20,10 @@ pipeline {
         notifyStageStart()
         container('skaffold') {
           sh "make all"
-            script {
-              def version = sh ( script: "make version", returnStdout: true).trim()
-              notifyStageEnd([status: "Published new images: ${version}"])
-            }
+          script {
+            // def version = sh ( script: "make version", returnStdout: true).trim()
+            notifyStageEnd([status: "Published new images: ${VERSION}"])
+          }
         }
       }
       post {
@@ -40,5 +40,5 @@ pipeline {
   }
 }
 def version() {
-    retrun sh(script: "git describe --tags --dirty", returnStdout: true).substring(1);
+    return sh(script: "git describe --tags --dirty", returnStdout: true).substring(1);
 }
