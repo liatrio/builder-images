@@ -40,6 +40,9 @@ pipeline {
       agent {
         label "lead-toolchain-gitops"
       }
+      steps {
+        sh "echo 'gndn'"
+      }
     }
   }
 }
