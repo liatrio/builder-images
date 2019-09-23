@@ -41,7 +41,7 @@ pipeline {
         label "lead-toolchain-gitops"
       }
       steps {
-        sh "echo 'gndn'"
+        echo "====++++something++++===="
       }
     }
   }
