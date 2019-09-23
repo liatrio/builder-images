@@ -1,8 +1,8 @@
 library 'LEAD'
 
 pipeline {
-  agent {
-    label "lead-toolchain-skaffold"
+  agent { 
+    none
   }
   environment {
     VERSION = version()
@@ -15,6 +15,9 @@ pipeline {
   }
   stages {
     stage('Build & publish images') {
+      agent {
+        label "lead-toolchain-skaffold"
+      }
       steps {
         notifyPipelineStart()
         notifyStageStart()
@@ -27,14 +30,17 @@ pipeline {
         }
       }
       post {
-        success {
-          agent {
-            label "lead-toolchain-gitops"
-          }
-        }
         failure {
           notifyStageEnd([result: "fail"])
         }
+      }
+    }
+    stage('GitOps: Update sandbox') {
+      when {
+        branch 'ENG-1183'
+      }
+      agent {
+        label "lead-toolchain-gitops"
       }
     }
   }
