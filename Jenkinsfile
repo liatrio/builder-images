@@ -1,9 +1,7 @@
 library 'LEAD'
 
 pipeline {
-  agent { 
-    none
-  }
+  agent none
   environment {
     VERSION = version()
     GITOPS_GIT_URL = 'git@github.com:liatrio/lead-environments.git'
