@@ -48,7 +48,9 @@ pipeline {
         GITOPS_GIT_PASSWORD = ''
       }
       steps {
-        echo "====++++something++++===="
+        container('gitops') {
+          sh "/go/bin/gitops"
+        }
       }
     }
   }
