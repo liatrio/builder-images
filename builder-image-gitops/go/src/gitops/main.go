@@ -37,7 +37,7 @@ func CheckIfError(err error) {
 }
 
 func gitClone(url string, auth transport.AuthMethod, repoPath string) (*git.Repository, error) {
-	fmt.Printf("Cloning git repo %s\n", url)
+	fmt.Printf("Cloning git repo %s as user %s\n", url, auth.Name)
 	return git.PlainClone(repoPath, false, &git.CloneOptions{
 		Auth: auth,
 		URL:  url,
@@ -242,11 +242,11 @@ func main() {
 		usage("ERROR: Git URL is required!")
 	}
 
-	if *gitUsername == "" {
+	if *gitUsername == "" || *gitUsername == nil {
 		usage("ERROR: Git username is required!")
 	}
 
-	if *gitPassword == "" {
+	if *gitPassword == "" || *gitPassword == nil {
 		usage("ERROR: Git password is required!")
 	}
 
