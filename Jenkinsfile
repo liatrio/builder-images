@@ -26,7 +26,7 @@ pipeline {
     }
     stage('GitOps: Update sandbox') {
       when {
-        branch 'ENG-1183'
+        branch 'master'
       }
       agent {
         label "lead-toolchain-gitops"
@@ -34,7 +34,7 @@ pipeline {
       environment {
         GITOPS_GIT_URL = 'https://github.com/liatrio/lead-environments.git'
         GITOPS_REPO_FILE = 'aws/liatrio-sandbox/terragrunt.hcl'
-        GITOPS_VALUES = 'inputs.builder_images_version=${VERSION}:inputs.jenkins_image_version=${VERSION}'
+        GITOPS_VALUES = "inputs.builder_images_version=${VERSION}:inputs.jenkins_image_version=${VERSION}"
       }
       steps {
         container('gitops') {
