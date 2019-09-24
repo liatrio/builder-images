@@ -222,7 +222,7 @@ func main() {
 		"gitPassword",
 		os.Getenv("GITOPS_GIT_PASSWORD"),
 		"Password or token to authenticate with git. Can also use GITOPS_GIT_PASSWORD environment variable")
-	repoPath := "/home/gitops/repo/"
+	repoPath := "/home/jenkins/repo/"
 	repoFile := flag.String(
 		"repoFile",
 		os.Getenv("GITOPS_REPO_FILE"),
