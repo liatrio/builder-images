@@ -37,7 +37,7 @@ func CheckIfError(err error) {
 }
 
 func gitClone(url string, auth transport.AuthMethod, repoPath string) (*git.Repository, error) {
-	fmt.Printf("Cloning git repo %s as user %s\n", url, auth.Name)
+	fmt.Printf("Cloning git repo %s as user %s\n", url, auth.Username)
 	return git.PlainClone(repoPath, false, &git.CloneOptions{
 		Auth: auth,
 		URL:  url,
