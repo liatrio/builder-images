@@ -242,11 +242,11 @@ func main() {
 		usage("ERROR: Git URL is required!")
 	}
 
-	if *gitUsername == "" || *gitUsername == nil {
+	if *gitUsername == "" || gitUsername == nil {
 		usage("ERROR: Git username is required!")
 	}
 
-	if *gitPassword == "" || *gitPassword == nil {
+	if *gitPassword == "" || gitPassword == nil {
 		usage("ERROR: Git password is required!")
 	}
 
