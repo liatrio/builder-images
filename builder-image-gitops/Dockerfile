@@ -21,4 +21,4 @@ COPY --from=build /go/bin /go/bin
 
 WORKDIR /home/gitops
 
-ENTRYPOINT [ "/go/bin/gitops" ]
+# ENTRYPOINT [ "/go/bin/gitops" ]

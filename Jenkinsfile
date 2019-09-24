@@ -1,7 +1,7 @@
 library 'LEAD'
 
 pipeline {
-  agent none
+  agent any
   environment {
     VERSION = version()
     GITOPS_GIT_URL = 'git@github.com:liatrio/lead-environments.git'
@@ -39,6 +39,13 @@ pipeline {
       }
       agent {
         label "lead-toolchain-gitops"
+      }
+      environment {
+        GITOPS_GIT_URL = 'git@github.com:liatrio/lead-environments.git'
+        GITOPS_REPO_FILE = 'aws/liatrio-sandbox/terragrunt.hcl'
+        GITOPS_VALUES = 'inputs.builder_images_version=${VERSION}:inputs.jenkins_image_version=${VERSION}'
+        GITOPS_GIT_USERNAME = ''
+        GITOPS_GIT_PASSWORD = ''
       }
       steps {
         echo "====++++something++++===="
