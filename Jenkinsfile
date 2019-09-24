@@ -4,12 +4,6 @@ pipeline {
   agent any
   environment {
     VERSION = version()
-    GITOPS_GIT_URL = 'git@github.com:liatrio/lead-environments.git'
-    GITOPS_REPO_FILE = 'aws/liatrio-sandbox/terragrunt.hcl'
-    GITOPS_VALUES = 'inputs.builder_images_version=${VERSION}:inputs.jenkins_image_version=${VERSION}'
-    GITOPS_GIT_USERNAME = ''
-    GITOPS_GIT_PASSWORD = ''
-
   }
   stages {
     stage('Build & publish images') {
@@ -21,11 +15,8 @@ pipeline {
         notifyStageStart()
         container('skaffold') {
           sh "make all"
-          script {
-            // def version = sh ( script: "make version", returnStdout: true).trim()
-            notifyStageEnd([status: "Published new images: ${VERSION}"])
-          }
         }
+        notifyStageEnd([status: "Published new images: ${VERSION}"])
       }
       post {
         failure {
@@ -41,11 +32,9 @@ pipeline {
         label "lead-toolchain-gitops"
       }
       environment {
-        GITOPS_GIT_URL = 'git@github.com:liatrio/lead-environments.git'
+        GITOPS_GIT_URL = 'https://github.com/liatrio/lead-environments.git'
         GITOPS_REPO_FILE = 'aws/liatrio-sandbox/terragrunt.hcl'
         GITOPS_VALUES = 'inputs.builder_images_version=${VERSION}:inputs.jenkins_image_version=${VERSION}'
-        GITOPS_GIT_USERNAME = ''
-        GITOPS_GIT_PASSWORD = ''
       }
       steps {
         container('gitops') {
