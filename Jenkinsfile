@@ -45,5 +45,5 @@ pipeline {
   }
 }
 def version() {
-    return sh(script: "git describe --tags --dirty", returnStdout: true)
+    return sh(script: "git describe --tags --dirty", returnStdout: true).trim()
 }
