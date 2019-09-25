@@ -6,6 +6,7 @@ RUN apk add \
     libc-dev \
     make
 
+
 RUN addgroup -g 1000 jenkins && adduser -h /home/jenkins -G jenkins -u 1000 -D jenkins
 USER jenkins
 WORKDIR /home/jenkins
@@ -27,7 +28,11 @@ RUN apk add --no-cache \
     openssh-client \
     make \
     musl-dev \
+    groff \
+    python3 \
     go
+
+RUN pip3 install awscli
 
 # Configure Go
 ENV GOROOT /usr/lib/go
