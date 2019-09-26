@@ -3,7 +3,7 @@ export SKAFFOLD_DEFAULT_REPO?=artifactory.toolchain.lead.prod.liatr.io/docker-re
 SKAFFOLD_FLAGS :=
 
 GIT_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
-VERSION=$(shell git describe --tags --dirty | cut -c 2-)
+VERSION?=$(shell git describe --tags --dirty | cut -c 2-)
 IS_SNAPSHOT = $(if $(findstring -, $(VERSION)),true,false)
 MAJOR_VERSION := $(word 1, $(subst ., ,$(VERSION)))
 MINOR_VERSION := $(word 2, $(subst ., ,$(VERSION)))

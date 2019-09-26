@@ -37,7 +37,7 @@ func CheckIfError(err error) {
 }
 
 func gitClone(url string, auth transport.AuthMethod, repoPath string) (*git.Repository, error) {
-	fmt.Printf("Cloning git repo %s\n", url)
+	fmt.Printf("Cloning git repo %s with %s\n", url, auth.String())
 	return git.PlainClone(repoPath, false, &git.CloneOptions{
 		Auth: auth,
 		URL:  url,
@@ -222,7 +222,7 @@ func main() {
 		"gitPassword",
 		os.Getenv("GITOPS_GIT_PASSWORD"),
 		"Password or token to authenticate with git. Can also use GITOPS_GIT_PASSWORD environment variable")
-	repoPath := "/home/gitops/repo/"
+	repoPath := "/home/jenkins/repo/"
 	repoFile := flag.String(
 		"repoFile",
 		os.Getenv("GITOPS_REPO_FILE"),
@@ -242,11 +242,11 @@ func main() {
 		usage("ERROR: Git URL is required!")
 	}
 
-	if *gitUsername == "" {
+	if *gitUsername == "" || gitUsername == nil {
 		usage("ERROR: Git username is required!")
 	}
 
-	if *gitPassword == "" {
+	if *gitPassword == "" || gitPassword == nil {
 		usage("ERROR: Git password is required!")
 	}
 
