@@ -16,4 +16,3 @@ This repo contains the source for builder images to be used as steps in CI/CD pi
 ### Testing
 Each directory for an image contains an image structure test to confirm that it will build correctly using the [Google Container Structure Test](https://github.com/GoogleContainerTools/container-structure-test) and Skaffold. You can build and test all the containers by running `skaffold build` or `make`.
 
-**test**
