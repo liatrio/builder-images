@@ -75,13 +75,12 @@ func gitCommit(worktree *git.Worktree, file string) (err error) {
 
   val,exists:= os.LookupEnv("GIT_URL")
   if exists {
-    source := strings.Split(strings.SplitN(val, "/", 4)[3], ".")
-    val = " from " + source[0]
+    val = createGitMessage("commit")
   }
 
 
 	fmt.Println("Commiting changes")
-	worktree.Commit(fmt.Sprintf("GitOps: Update %s%s", file, val), &git.CommitOptions{
+	worktree.Commit(fmt.Sprintf("GitOps: Update %s\n%s", file, val), &git.CommitOptions{
 		Author: &object.Signature{
 			Name:  "GitOps Automation",
 			Email: "gitops@liatr.io",
@@ -104,13 +103,11 @@ func githubPullRequest(httpClient *http.Client, org string, repo string, branch 
   fmt.Printf("Create pull request for branch %s\n", branch.Name().Short())
 	client := github.NewClient(httpClient)
 
-
-
 	newPR := &github.NewPullRequest{
 		Title:               github.String("GitOps"),
 		Head:                github.String(branch.Name().Short()),
 		Base:                github.String("master"),
-		Body:                github.String(createPullRequestMessage()),
+		Body:                github.String(createGitMessage("pull request")),
 		MaintainerCanModify: github.Bool(true),
 	}
 
@@ -119,18 +116,18 @@ func githubPullRequest(httpClient *http.Client, org string, repo string, branch 
 	return
 }
 
-func createPullRequestMessage() (pullRequestMessage string) {
+func createGitMessage(gitAction string) (pullRequestMessage string) {
   val,exists:= os.LookupEnv("GIT_URL")
   if exists {
     source := strings.Split(strings.SplitN(val, "/", 4)[3], ".")
-    message := "This pull request was automatically generated from the pipeline of the repo " + source[0] + "\n\n"
+    message := "This " + gitAction + " was automatically generated from the pipeline of the repo " + source[0] + "\n\n"
 
     gitAuth := &githttp.BasicAuth{
       Username: os.Getenv("GITOPS_GIT_USERNAME"),
       Password: os.Getenv("GITOPS_GIT_PASSWORD"),
     }
 
-    sourceRepo, err := gitClone(val, gitAuth, "/home/jenkins/sourceRepo")
+    sourceRepo, err := gitClone(val, gitAuth, "/home/jenkins/tempSourceRepo/")
     CheckIfError(err)
 
     ref, err := sourceRepo.Head()
@@ -139,10 +136,12 @@ func createPullRequestMessage() (pullRequestMessage string) {
     cIter, err := sourceRepo.Log(&git.LogOptions{From: ref.Hash()})
     CheckIfError(err)
 
+    os.RemoveAll("/home/jenkins/tempSourceRepo/")
+
     c, err := cIter.Next()
     return message + c.String()
   }
-  return "This pull request was automatically generated https://github.com/liatrio/builder-images/tree/master/builder-image-gitops"
+  return "This " + gitAction + " was automatically generated https://github.com/liatrio/builder-images/tree/master/builder-image-gitops"
 }
 
 func parseFile(filePath string) (*ast.File, error) {
