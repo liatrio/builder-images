@@ -73,10 +73,7 @@ func gitCommit(worktree *git.Worktree, file string) (err error) {
 		return
 	}
 
-  val,exists:= os.LookupEnv("GIT_URL")
-  if exists {
-    val = createGitMessage("commit")
-  }
+  val = createGitMessage("commit")
 
 
 	fmt.Println("Commiting changes")
