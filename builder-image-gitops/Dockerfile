@@ -1,6 +1,6 @@
 FROM golang:1.13-alpine AS build
 
-RUN apk add git
+RUN apk add git build-base
 
 RUN addgroup -g 1000 jenkins && adduser -h /home/jenkins -G jenkins -u 1000 -D jenkins
 USER jenkins
@@ -11,7 +11,7 @@ COPY --chown=jenkins:jenkins ./go /go
 WORKDIR /go
 
 RUN go install gitops
-RUN go test -v
+RUN go test gitops -v
 
 FROM alpine
 
