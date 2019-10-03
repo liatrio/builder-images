@@ -73,8 +73,11 @@ func gitCommit(worktree *git.Worktree, file string) (err error) {
 		return
 	}
 
+  val := createGitMessage("commit")
+
+
 	fmt.Println("Commiting changes")
-	worktree.Commit(fmt.Sprintf("GitOps: Update %s", file), &git.CommitOptions{
+	worktree.Commit(fmt.Sprintf("GitOps: Update %s\n%s", file, val), &git.CommitOptions{
 		Author: &object.Signature{
 			Name:  "GitOps Automation",
 			Email: "gitops@liatr.io",
@@ -94,20 +97,48 @@ func gitPush(repo *git.Repository, auth transport.AuthMethod) (err error) {
 }
 
 func githubPullRequest(httpClient *http.Client, org string, repo string, branch *plumbing.Reference) (pullRequest *github.PullRequest, err error) {
-	fmt.Printf("Create pull request for branch %s\n", branch.Name().Short())
+  fmt.Printf("Create pull request for branch %s\n", branch.Name().Short())
 	client := github.NewClient(httpClient)
 
 	newPR := &github.NewPullRequest{
 		Title:               github.String("GitOps"),
 		Head:                github.String(branch.Name().Short()),
 		Base:                github.String("master"),
-		Body:                github.String("This pull request was automatically generated https://github.com/liatrio/builder-images/tree/master/builder-image-gitops"),
+		Body:                github.String(createGitMessage("pull request")),
 		MaintainerCanModify: github.Bool(true),
 	}
 
 	pullRequest, _, err = client.PullRequests.Create(context.Background(), org, repo, newPR)
 
 	return
+}
+
+func createGitMessage(gitAction string) (pullRequestMessage string) {
+  val,exists:= os.LookupEnv("GIT_URL")
+  if exists {
+    source := strings.Split(strings.SplitN(val, "/", 4)[3], ".")
+    message := "This " + gitAction + " was automatically generated from the pipeline of the repo " + source[0] + "\n\n"
+
+    gitAuth := &githttp.BasicAuth{
+      Username: os.Getenv("GITOPS_GIT_USERNAME"),
+      Password: os.Getenv("GITOPS_GIT_PASSWORD"),
+    }
+
+    sourceRepo, err := gitClone(val, gitAuth, "/home/jenkins/tempSourceRepo/")
+    CheckIfError(err)
+
+    ref, err := sourceRepo.Head()
+    CheckIfError(err)
+
+    cIter, err := sourceRepo.Log(&git.LogOptions{From: ref.Hash()})
+    CheckIfError(err)
+
+    os.RemoveAll("/home/jenkins/tempSourceRepo/")
+
+    c, err := cIter.Next()
+    return message + c.String()
+  }
+  return "This " + gitAction + " was automatically generated https://github.com/liatrio/builder-images/tree/master/builder-image-gitops"
 }
 
 func parseFile(filePath string) (*ast.File, error) {
