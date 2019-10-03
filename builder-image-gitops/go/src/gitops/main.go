@@ -73,7 +73,7 @@ func gitCommit(worktree *git.Worktree, file string) (err error) {
 		return
 	}
 
-  val = createGitMessage("commit")
+  val := createGitMessage("commit")
 
 
 	fmt.Println("Commiting changes")
