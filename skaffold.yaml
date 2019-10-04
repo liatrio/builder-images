@@ -4,6 +4,8 @@ build:
   artifacts:
   - image: builder-image-aws
     context: ./builder-image-aws
+  - image: build-image-gradle
+    context: ./builder-image-gradle
   - image: builder-image-maven
     context: ./builder-image-maven
   - image: builder-image-openshift
@@ -21,6 +23,9 @@ test:
 - image: builder-image-aws
   structureTests:
   - ./builder-image-aws/test/*
+- image: build-image-gradle
+  structureTests:
+  - ./builder-image-gradle/test/*
 - image: builder-image-maven
   structureTests:
   - ./builder-image-maven/test/*
