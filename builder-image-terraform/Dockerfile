@@ -35,7 +35,7 @@ ENV GOPATH /go
 ENV PATH /go/bin:$PATH
 RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 
-ENV TERRAFORM_VERSION 0.12.9
+ENV TERRAFORM_VERSION 0.12.10
 RUN curl -f -Lo terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
   unzip terraform.zip && \
   rm -f terraform.zip && \
