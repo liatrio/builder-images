@@ -1,23 +1,3 @@
-FROM alpine:3.9 AS buildKeycloak
-
-RUN apk add \
-    git \
-    go \
-    libc-dev \
-    make
-
-RUN addgroup -g 1000 jenkins && adduser -h /home/jenkins -G jenkins -u 1000 -D jenkins
-USER jenkins
-WORKDIR /home/jenkins
-
-RUN wget https://github.com/mrparkers/terraform-provider-keycloak/archive/master.zip -O - | unzip -
-
-# the 2nd line is a temporary fix because git.apache.org is gone. see https://github.com/mrparkers/terraform-provider-keycloak/pull/150
-RUN	cd ./terraform-provider-keycloak-master \
-    && echo "replace git.apache.org/thrift.git => github.com/apache/thrift v0.0.0-20180902110319-2566ecd5d999" >> go.mod \
-    && GO111MODULE=on go mod download \
-    && make build
-
 FROM alpine:3.9
 
 RUN apk add --no-cache \
@@ -49,5 +29,11 @@ RUN curl -f -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/d
 
 RUN addgroup -g 1000 jenkins && adduser -h /home/jenkins -G jenkins -u 1000 -D jenkins
 USER jenkins
+WORKDIR /home/jenkins
 
-COPY --from=buildKeycloak --chown=1000:1000 /home/jenkins/terraform-provider-keycloak-master/terraform-provider-keycloak /home/jenkins/.terraform.d/plugins/
+ENV TERRAFORM_PROVIDER_KEYCLOAK_VERSION 1.11.1
+RUN curl -Lo terraform-provider-keycloak.zip https://github.com/mrparkers/terraform-provider-keycloak/releases/download/${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}/terraform-provider-keycloak_v${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}_linux_amd64_static.zip && \
+    unzip -j terraform-provider-keycloak.zip && \
+    rm -f terraform-provider-keycloak.zip && \
+    mkdir -p /home/jenkins/.terraform.d/plugins/ && \
+    mv terraform-provider-keycloak_v${TERRAFORM_PROVIDER_KEYCLOAK_VERSION} /home/jenkins/.terraform.d/plugins/
