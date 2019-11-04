@@ -15,12 +15,23 @@ ENV GOPATH /go
 ENV PATH /go/bin:$PATH
 RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 
+WORKDIR /tmp/
 ENV TERRAFORM_VERSION 0.12.13
-RUN curl -f -Lo terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-  unzip terraform.zip && \
-  rm -f terraform.zip && \
-  chmod +x terraform && \
-  mv terraform /usr/bin
+COPY sig/hashicorp.asc /tmp/.
+ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip /tmp/
+ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS /tmp/
+ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS.sig /tmp/
+
+RUN apk --update add --virtual verify gpgme \
+ && gpg --import hashicorp.asc \
+ && gpg --verify /tmp/terraform_${TERRAFORM_VERSION}_SHA256SUMS.sig \
+ && cat terraform_${TERRAFORM_VERSION}_SHA256SUMS | grep linux_amd64 | sha256sum -c \
+ && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+ && chmod +x terraform \
+ && mv terraform /usr/bin \
+ && apk del verify \
+ && rm -rf /tmp/* \
+ && rm -rf /var/cache/apk/*
 
 ENV TERRAGRUNT_VERSION 0.21.2
 RUN curl -f -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 && \
