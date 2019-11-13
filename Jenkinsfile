@@ -1,5 +1,3 @@
-library 'LEAD'
-
 pipeline {
   agent any
   environment {
@@ -11,17 +9,10 @@ pipeline {
         label "lead-toolchain-skaffold"
       }
       steps {
-        notifyPipelineStart()
-        notifyStageStart()
         container('skaffold') {
           sh "make all"
         }
-        notifyStageEnd([status: "Published new images: ${VERSION}"])
-      }
-      post {
-        failure {
-          notifyStageEnd([result: "fail"])
-        }
+        stageMessage "Published new images: ${VERSION}"
       }
     }
     stage('GitOps: Update sandbox') {
