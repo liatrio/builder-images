@@ -1,4 +1,4 @@
-apiVersion: skaffold/v1beta13
+apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
@@ -26,6 +26,9 @@ test:
 - image: build-image-gradle
   structureTests:
   - ./builder-image-gradle/test/*
+- image: build-image-ruby
+  structureTests:
+  - ./builder-image-ruby/test/*
 - image: builder-image-maven
   structureTests:
   - ./builder-image-maven/test/*
