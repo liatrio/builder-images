@@ -4,5 +4,5 @@ commandTests:
   - name: "gradle"
     command: "gradle"
     args: ["--version"]
-    expectedOutput: ["Gradle \d+.\d+.\d+"]
+    expectedOutput: ["Gradle \\d+\\.\\d+\\.\\d+"]
     exitCode: 0
