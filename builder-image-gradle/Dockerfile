@@ -1,0 +1,1 @@
+FROM gradle:5.6-jdk8
