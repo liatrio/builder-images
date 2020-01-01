@@ -18,6 +18,8 @@ build:
     context: ./builder-image-terraform
   - image: builder-image-gitops
     context: ./builder-image-gitops
+  - image: builder-image-goreleaser
+    context: ./builder-image-goreleaser
   - image: jenkins-image
     context: ./jenkins-image
 
@@ -43,6 +45,9 @@ test:
 - image: builder-image-skaffold
   structureTests:
   - ./builder-image-skaffold/test/*
+- image: builder-image-goreleaser
+  structureTests:
+  - ./builder-image-goreleaser/test/*
 - image: builder-image-terraform
   structureTests:
   - ./builder-image-terraform/test/*
