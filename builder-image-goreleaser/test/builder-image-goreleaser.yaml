@@ -6,3 +6,8 @@ commandTests:
     args: ["--version"]
     expectedError: ["version: \\d+\\.\\d+\\.\\d+"]
     exitCode: 0
+  - name: "libc"
+    command: "gcc"
+    args: ["-print-file-name=libc.so"]
+    excludedOutput: ["^libc.so"]
+    exitCode: 0
