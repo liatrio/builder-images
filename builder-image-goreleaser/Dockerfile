@@ -4,7 +4,7 @@ RUN wget https://github.com/goreleaser/goreleaser/releases/download/v0.123.3/gor
 
 FROM golang:1.13-alpine
 
-RUN apk add gcc musl-dev
+RUN apk add gcc musl-dev git
 
 RUN addgroup -g 1000 jenkins && adduser -h /home/jenkins -G jenkins -u 1000 -D jenkins
 USER jenkins

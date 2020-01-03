@@ -11,3 +11,7 @@ commandTests:
     args: ["-print-file-name=libc.so"]
     excludedOutput: ["^libc.so"]
     exitCode: 0
+  - name: "git"
+    command: "git"
+    args: ["version"]
+    exitCode: 0
