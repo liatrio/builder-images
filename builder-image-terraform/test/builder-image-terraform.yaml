@@ -4,12 +4,12 @@ commandTests:
   - name: "terraform version"
     command: "terraform"
     args: ["version"]
-    expectedOutput: ["Terraform v0\\.12\\.17"]
+    expectedOutput: ["Terraform v0\\.12\\.19"]
     exitCode: 0
   - name: "terragrunt version"
     command: "terragrunt"
     args: ["--version"]
-    expectedOutput: ["terragrunt version v0\\.21\\.2"]
+    expectedOutput: ["terragrunt version v0\\.21\\.10"]
     exitCode: 0
 
 fileExistenceTests:
