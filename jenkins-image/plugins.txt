@@ -104,5 +104,3 @@ workflow-scm-step:2.9
 workflow-step-api:2.22
 workflow-support:3.3
 ws-cleanup:0.37
-pipeline-status-plugin:1.0.0-1-3cba41af
-
