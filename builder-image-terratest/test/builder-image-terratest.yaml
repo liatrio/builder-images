@@ -16,6 +16,11 @@ commandTests:
     args: ["version", "--client"]
     expectedOutput: ["Client Version: version\\.Info{Major:\"1\", Minor:\"17\""]
     exitCode: 0
+  - name: "AWS IAM authenticator"
+    command: "aws-iam-authenticator"
+    args: ["version"]
+    expectedOutput: ["{\"Version\":\"v\\d+.\\d+.\\d+\",\"Commit\":\"[a-f0-9]+\"}"]
+    exitCode: 0
 
 fileExistenceTests:
   - name: 'keycloak plugin'

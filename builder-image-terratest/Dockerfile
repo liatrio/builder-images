@@ -1,7 +1,7 @@
 # Download and verify Terraform
 FROM alpine:3.11 AS TERRAFORM
 
-RUN apk --update add gpgme
+RUN apk --no-cache add gpgme
 
 ENV TERRAFORM_VERSION 0.12.20
 COPY sig/hashicorp.asc .
@@ -24,6 +24,19 @@ ENV TERRAFORM_PROVIDER_KEYCLOAK_VERSION 1.11.1
 ADD https://github.com/mrparkers/terraform-provider-keycloak/releases/download/${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}/terraform-provider-keycloak_v${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}_linux_amd64_static.zip /
 RUN unzip -j /terraform-provider-keycloak_v${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}_linux_amd64_static.zip
 
+# Download and verify AWS IAM Authenticator
+FROM alpine:3.11 as AWS_IAM_AUTHENTICATOR
+
+RUN apk add --no-cache openssl
+
+ENV AWS_IAM_AUTHENTICATOR_VERSION 1.14.6/2019-08-22
+ADD https://amazon-eks.s3-us-west-2.amazonaws.com/${AWS_IAM_AUTHENTICATOR_VERSION}/bin/linux/amd64/aws-iam-authenticator /
+ADD https://amazon-eks.s3-us-west-2.amazonaws.com/${AWS_IAM_AUTHENTICATOR_VERSION}/bin/linux/amd64/aws-iam-authenticator.sha256 /
+
+RUN openssl sha1 -sha256 /aws-iam-authenticator
+
+RUN chmod +x /aws-iam-authenticator
+
 # Main image includes golang, terraform, kubectl, Keycloak
 FROM alpine:3.11
 
@@ -45,6 +58,9 @@ COPY --from=TERRAFORM terraform /usr/bin
 ENV KUBECTL_VERSION v1.17.0
 ADD https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl /usr/bin
 RUN chmod a+x /usr/bin/kubectl
+
+## Install AWS IAM Authenticator
+COPY --from=AWS_IAM_AUTHENTICATOR /aws-iam-authenticator /usr/bin/
 
 ## Create Jenkins user
 RUN addgroup -g 1000 jenkins && adduser -h /home/jenkins -G jenkins -u 1000 -D jenkins
