@@ -13,7 +13,7 @@ RUN apk add --no-cache \
 ENV GOROOT /usr/lib/go
 ENV GOPATH /go
 ENV PATH /go/bin:$PATH
-RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
+RUN mkdir -m 0777 ${GOPATH} ${GOPATH}/src ${GOPATH}/bin
 
 WORKDIR /tmp/
 ENV TERRAFORM_VERSION 0.12.20
