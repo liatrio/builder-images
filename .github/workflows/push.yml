@@ -16,10 +16,6 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
         role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
         role-duration-seconds: 1200
-    - name: ECR Login
-      id: ecr_login
-      uses: aws-actions/amazon-ecr-login@v1
     - name: Skaffold Build
+      #uses: ./../github-actions/skaffold-build
       uses: liatrio/github-actions/skaffold-build@master
-      with:
-        default_repo: ${{ steps.ecr_login.outputs.registry }}
