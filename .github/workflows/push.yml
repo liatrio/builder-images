@@ -16,10 +16,11 @@ jobs:
         role-duration-seconds: 1200
     - id: ecr
       uses: liatrio/github-actions/ecr@master
+      #uses: ./../github-actions/ecr
     - id: skaffold
       uses: liatrio/github-actions/skaffold-build@master
       with:
-        default_repo: ${{ steps.ecr.registry }}
+        default_repo: ${{ steps.ecr.outputs.registry }}
     - id: gitextra
       uses: liatrio/github-actions/git-extra@master
     - id: gitops
