@@ -1,0 +1,6 @@
+-P ubuntu-18.04=nektos/act-environments-ubuntu:18.04
+-s AWS_ACCESS_KEY_ID
+-s AWS_SECRET_ACCESS_KEY
+-s AWS_REGION
+-s AWS_ROLE_TO_ASSUME
+-s GITTY_UP_TOKEN
