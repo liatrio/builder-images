@@ -4,6 +4,10 @@ build:
   artifacts:
   - image: builder-image-aws
     context: ./builder-image-aws
+  - image: builder-image-gradle
+    context: ./builder-image-gradle
+  - image: builder-image-ruby
+    context: ./builder-image-ruby
   - image: builder-image-maven
     context: ./builder-image-maven
   - image: builder-image-openshift
@@ -12,8 +16,12 @@ build:
     context: ./builder-image-skaffold
   - image: builder-image-terraform
     context: ./builder-image-terraform
+  - image: builder-image-terratest
+    context: ./builder-image-terratest
   - image: builder-image-gitops
     context: ./builder-image-gitops
+  - image: builder-image-goreleaser
+    context: ./builder-image-goreleaser
   - image: jenkins-image
     context: ./jenkins-image
 
@@ -21,6 +29,12 @@ test:
 - image: builder-image-aws
   structureTests:
   - ./builder-image-aws/test/*
+- image: builder-image-gradle
+  structureTests:
+  - ./builder-image-gradle/test/*
+- image: builder-image-ruby
+  structureTests:
+  - ./builder-image-ruby/test/*
 - image: builder-image-maven
   structureTests:
   - ./builder-image-maven/test/*
@@ -33,6 +47,12 @@ test:
 - image: builder-image-skaffold
   structureTests:
   - ./builder-image-skaffold/test/*
+- image: builder-image-goreleaser
+  structureTests:
+  - ./builder-image-goreleaser/test/*
 - image: builder-image-terraform
   structureTests:
   - ./builder-image-terraform/test/*
+- image: builder-image-terratest
+  structureTests:
+  - ./builder-image-terratest/test/*

@@ -1,0 +1,32 @@
+schemaVersion: "2.0.0"
+
+commandTests:
+  - name: "go"
+    command: "go"
+    args: ["version"]
+    expectedOutput: ["go version go\\d+\\.\\d+\\.\\d+ linux/amd64"]
+    exitCode: 0
+  - name: "terraform version"
+    command: "terraform"
+    args: ["version"]
+    expectedOutput: ["Terraform v0\\.12\\.20"]
+    exitCode: 0
+  - name: "kubectl version"
+    command: "kubectl"
+    args: ["version", "--client"]
+    expectedOutput: ["Client Version: version\\.Info{Major:\"1\", Minor:\"17\""]
+    exitCode: 0
+  - name: "AWS IAM authenticator"
+    command: "aws-iam-authenticator"
+    args: ["version"]
+    expectedOutput: ["{\"Version\":\"v\\d+.\\d+.\\d+\",\"Commit\":\"[a-f0-9]+\"}"]
+    exitCode: 0
+
+fileExistenceTests:
+  - name: 'keycloak plugin'
+    path: '/home/jenkins/.terraform.d/plugins/terraform-provider-keycloak_v1.11.1'
+    shouldExist: true
+    permissions: '-rwxr-xr-x'
+    uid: 1000
+    gid: 1000
+    isExecutableBy: 'any'

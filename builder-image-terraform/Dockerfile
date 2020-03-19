@@ -13,10 +13,10 @@ RUN apk add --no-cache \
 ENV GOROOT /usr/lib/go
 ENV GOPATH /go
 ENV PATH /go/bin:$PATH
-RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
+RUN mkdir -m 0777 ${GOPATH} ${GOPATH}/src ${GOPATH}/bin
 
 WORKDIR /tmp/
-ENV TERRAFORM_VERSION 0.12.13
+ENV TERRAFORM_VERSION 0.12.20
 COPY sig/hashicorp.asc /tmp/.
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip /tmp/
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS /tmp/
@@ -33,7 +33,7 @@ RUN apk --update add --virtual verify gpgme \
  && rm -rf /tmp/* \
  && rm -rf /var/cache/apk/*
 
-ENV TERRAGRUNT_VERSION 0.21.2
+ENV TERRAGRUNT_VERSION 0.21.10
 RUN curl -f -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 && \
   chmod +x terragrunt && \
   mv terragrunt /usr/bin
