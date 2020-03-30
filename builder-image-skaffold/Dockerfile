@@ -7,7 +7,7 @@ RUN apk add --no-cache \
 		openssh-client \
 		make
 
-ENV SKAFFOLD_VERSION 0.38.0
+ENV SKAFFOLD_VERSION 1.6.0
 RUN curl -f -Lo skaffold https://github.com/GoogleCloudPlatform/skaffold/releases/download/v${SKAFFOLD_VERSION}/skaffold-linux-amd64 && \
   chmod +x skaffold && \
   mv skaffold /usr/bin
@@ -17,8 +17,8 @@ RUN curl -f -Lo container-structure-test https://storage.googleapis.com/containe
   chmod +x container-structure-test && \
   mv container-structure-test /usr/bin
 
-ENV HELM_VERSION 2.14.1
-RUN curl -f -L https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz | tar -zx && \
+ENV HELM_VERSION 3.1.2
+RUN curl -f -L https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz | tar -zx && \
   chmod +x linux-amd64/helm && \
   mv linux-amd64/helm /usr/bin && \
   rm -rf linux-amd64

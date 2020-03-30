@@ -9,7 +9,7 @@ commandTests:
   - name: "terraform version"
     command: "terraform"
     args: ["version"]
-    expectedOutput: ["Terraform v0\\.12\\.20"]
+    expectedOutput: ["Terraform v0\\.12\\.24"]
     exitCode: 0
   - name: "kubectl version"
     command: "kubectl"

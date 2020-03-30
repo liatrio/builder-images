@@ -3,7 +3,7 @@ FROM alpine:3.11 AS TERRAFORM
 
 RUN apk --no-cache add gpgme
 
-ENV TERRAFORM_VERSION 0.12.20
+ENV TERRAFORM_VERSION 0.12.24
 COPY sig/hashicorp.asc .
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip .
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS .
