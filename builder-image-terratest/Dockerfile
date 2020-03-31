@@ -15,14 +15,18 @@ RUN gpg --import hashicorp.asc \
  && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
  && chmod +x terraform
 
-# Download Keycloak Terraform Provider
-FROM alpine:3.11 AS KEYCLOAK
+# Download Keycloak && Harbor Terraform Providers
+FROM alpine:3.11 AS TFPROVIDERS
 
 WORKDIR /plugins
 
 ENV TERRAFORM_PROVIDER_KEYCLOAK_VERSION 1.11.1
 ADD https://github.com/mrparkers/terraform-provider-keycloak/releases/download/${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}/terraform-provider-keycloak_v${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}_linux_amd64_static.zip /
 RUN unzip -j /terraform-provider-keycloak_v${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}_linux_amd64_static.zip
+
+ENV TERRAFORM_PROVIDER_HARBOR_VERSION 0.0.4
+ADD https://github.com/liatrio/terraform-provider-harbor/releases/download/v${TERRAFORM_PROVIDER_HARBOR_VERSION}/terraform-provider-harbor_${TERRAFORM_PROVIDER_HARBOR_VERSION}_linux_amd64.zip /
+RUN unzip -j /terraform-provider-harbor_${TERRAFORM_PROVIDER_HARBOR_VERSION}_linux_amd64.zip -x "LICENSE"
 
 # Download and verify AWS IAM Authenticator
 FROM alpine:3.11 as AWS_IAM_AUTHENTICATOR
@@ -68,5 +72,5 @@ RUN addgroup -g 1000 jenkins && adduser -h /home/jenkins -G jenkins -u 1000 -D j
 USER jenkins
 WORKDIR /home/jenkins
 
-## Install Keycloak plugin
-COPY --chown=jenkins:jenkins --from=KEYCLOAK /plugins/* /home/jenkins/.terraform.d/plugins/
+## Install Terraform plugins
+COPY --chown=jenkins:jenkins --from=TFPROVIDERS /plugins/* /home/jenkins/.terraform.d/plugins/
