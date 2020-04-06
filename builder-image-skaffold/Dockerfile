@@ -9,7 +9,7 @@ RUN git clone https://github.com/mrparkers/skaffold.git && \
         -ldflags " -X github.com/GoogleContainerTools/skaffold/pkg/skaffold/version.version=v1.6.0-55-g145f59579 -X github.com/GoogleContainerTools/skaffold/pkg/skaffold/version.gitCommit=145f59579470eb1f0a7f40d8e0924f8716c6f05b -X github.com/GoogleContainerTools/skaffold/pkg/skaffold/version.gitTreeState=clean -s -w  -extldflags \"-static\"" \
         -o out/skaffold github.com/GoogleContainerTools/skaffold/cmd/skaffold
 
-FROM docker:18.09
+FROM docker:18.09-dind
 
 RUN apk add --no-cache \
 		git \
