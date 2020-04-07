@@ -2,8 +2,9 @@ FROM golang:1.14.1 as builder
 
 WORKDIR /usr/src
 
-RUN git clone https://github.com/mrparkers/skaffold.git && \
+RUN git clone https://github.com/GoogleContainerTools/skaffold.git && \
     cd skaffold && \
+    git checkout 0a3254e252b7cadc907f75018088d78f48fb7ada && \
     GOOS=linux GOARCH=amd64 CGO_ENABLED=0 \
         go build -tags "osusergo netgo static_build release" \
         -ldflags " -X github.com/GoogleContainerTools/skaffold/pkg/skaffold/version.version=v1.6.0-55-g145f59579 -X github.com/GoogleContainerTools/skaffold/pkg/skaffold/version.gitCommit=145f59579470eb1f0a7f40d8e0924f8716c6f05b -X github.com/GoogleContainerTools/skaffold/pkg/skaffold/version.gitTreeState=clean -s -w  -extldflags \"-static\"" \
