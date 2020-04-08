@@ -16,7 +16,9 @@ RUN apk add --no-cache \
 		git \
 		curl \
 		openssh-client \
-		make
+		make \
+    groff \
+    python3
 
 #ENV SKAFFOLD_VERSION 1.6.0
 #RUN curl -f -Lo skaffold https://github.com/GoogleCloudPlatform/skaffold/releases/download/v${SKAFFOLD_VERSION}/skaffold-linux-amd64 && \
@@ -25,6 +27,9 @@ RUN apk add --no-cache \
 
 COPY --from=builder /usr/src/skaffold/out/skaffold /usr/bin/skaffold
 RUN skaffold version
+
+RUN pip3 install awscli && \
+    aws --version
 
 ENV CST_VERSION 1.8.0
 RUN curl -f -Lo container-structure-test https://storage.googleapis.com/container-structure-test/v${CST_VERSION}/container-structure-test-linux-amd64 && \
