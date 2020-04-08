@@ -2,8 +2,9 @@ FROM golang:1.14.1 as builder
 
 WORKDIR /usr/src
 
-RUN git clone https://github.com/mrparkers/skaffold.git && \
+RUN git clone https://github.com/GoogleContainerTools/skaffold.git && \
     cd skaffold && \
+    git checkout 0a3254e252b7cadc907f75018088d78f48fb7ada && \
     GOOS=linux GOARCH=amd64 CGO_ENABLED=0 \
         go build -tags "osusergo netgo static_build release" \
         -ldflags " -X github.com/GoogleContainerTools/skaffold/pkg/skaffold/version.version=v1.6.0-55-g145f59579 -X github.com/GoogleContainerTools/skaffold/pkg/skaffold/version.gitCommit=145f59579470eb1f0a7f40d8e0924f8716c6f05b -X github.com/GoogleContainerTools/skaffold/pkg/skaffold/version.gitTreeState=clean -s -w  -extldflags \"-static\"" \
@@ -29,6 +30,11 @@ ENV CST_VERSION 1.8.0
 RUN curl -f -Lo container-structure-test https://storage.googleapis.com/container-structure-test/v${CST_VERSION}/container-structure-test-linux-amd64 && \
   chmod +x container-structure-test && \
   mv container-structure-test /usr/bin
+
+ENV KUBECTL_VERSION 1.15.0
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+  chmod +x ./kubectl && \
+  mv ./kubectl /usr/local/bin/kubectl
 
 ENV HELM_VERSION 3.1.2
 RUN curl -f -L https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz | tar -zx && \
