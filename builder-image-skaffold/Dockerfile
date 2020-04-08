@@ -31,6 +31,11 @@ RUN curl -f -Lo container-structure-test https://storage.googleapis.com/containe
   chmod +x container-structure-test && \
   mv container-structure-test /usr/bin
 
+ENV KUBECTL_VERSION 1.15.0
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+  chmod +x ./kubectl && \
+  mv ./kubectl /usr/local/bin/kubectl
+
 ENV HELM_VERSION 3.1.2
 RUN curl -f -L https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz | tar -zx && \
   chmod +x linux-amd64/helm && \
