@@ -17,8 +17,8 @@ RUN apk add --no-cache \
 		curl \
 		openssh-client \
 		make \
-    groff \
-    python3
+		groff \
+		python3
 
 #ENV SKAFFOLD_VERSION 1.6.0
 #RUN curl -f -Lo skaffold https://github.com/GoogleCloudPlatform/skaffold/releases/download/v${SKAFFOLD_VERSION}/skaffold-linux-amd64 && \
