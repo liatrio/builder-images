@@ -4,7 +4,7 @@ commandTests:
   - name: "aws test"
     command: "aws"
     args: ["--version"]
-    expectedOutput: ["1\\.18\\d+"]
+    expectedOutput: ["1\\.18\\.\\d+"]
     exitCode: 1
   - name: "skaffold version"
     command: "skaffold"
