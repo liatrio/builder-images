@@ -5,7 +5,7 @@ commandTests:
     command: "aws"
     args: ["--version"]
     expectedOutput: ["1\\.18\\.\\d+"]
-    exitCode: 1
+    exitCode: 0
   - name: "skaffold version"
     command: "skaffold"
     args: ["version"]
@@ -20,7 +20,7 @@ commandTests:
     command: "docker"
     args: ["version"]
     expectedOutput: ["18\\.09\\.\\d+"]
-    exitCode: 0
+    exitCode: 1
 fileExistenceTests:
   - name: 'aws'
     path: '/usr/bin/aws'
