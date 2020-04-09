@@ -2,7 +2,7 @@ schemaVersion: "2.0.0"
 
 commandTests:
   - name: "aws test"
-    command "aws"
+    command: "aws"
     args: ["--version"]
     expectedOutput: ["2\\.0\\.7"]
     exitCode: 1
