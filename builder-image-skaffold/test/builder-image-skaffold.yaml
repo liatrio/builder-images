@@ -20,7 +20,7 @@ commandTests:
     command: "docker"
     args: ["version"]
     expectedOutput: ["18\\.09\\.\\d+"]
-    exitCode: 1
+    exitCode: 0
 fileExistenceTests:
   - name: 'aws'
     path: '/usr/bin/aws'
