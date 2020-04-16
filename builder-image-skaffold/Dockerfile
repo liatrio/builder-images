@@ -10,13 +10,15 @@ RUN git clone https://github.com/GoogleContainerTools/skaffold.git && \
         -ldflags " -X github.com/GoogleContainerTools/skaffold/pkg/skaffold/version.version=v1.6.0-55-g145f59579 -X github.com/GoogleContainerTools/skaffold/pkg/skaffold/version.gitCommit=145f59579470eb1f0a7f40d8e0924f8716c6f05b -X github.com/GoogleContainerTools/skaffold/pkg/skaffold/version.gitTreeState=clean -s -w  -extldflags \"-static\"" \
         -o out/skaffold github.com/GoogleContainerTools/skaffold/cmd/skaffold
 
-FROM docker:18.09
+FROM docker:18.09-dind
 
 RUN apk add --no-cache \
 		git \
 		curl \
 		openssh-client \
-		make
+		make \
+		groff \
+		python3
 
 #ENV SKAFFOLD_VERSION 1.6.0
 #RUN curl -f -Lo skaffold https://github.com/GoogleCloudPlatform/skaffold/releases/download/v${SKAFFOLD_VERSION}/skaffold-linux-amd64 && \
@@ -25,6 +27,9 @@ RUN apk add --no-cache \
 
 COPY --from=builder /usr/src/skaffold/out/skaffold /usr/bin/skaffold
 RUN skaffold version
+
+RUN pip3 install awscli && \
+    aws --version
 
 ENV CST_VERSION 1.8.0
 RUN curl -f -Lo container-structure-test https://storage.googleapis.com/container-structure-test/v${CST_VERSION}/container-structure-test-linux-amd64 && \

@@ -1,6 +1,11 @@
 schemaVersion: "2.0.0"
 
 commandTests:
+  - name: "aws test"
+    command: "aws"
+    args: ["--version"]
+    expectedOutput: ["1\\.18\\.\\d+"]
+    exitCode: 0
   - name: "skaffold version"
     command: "skaffold"
     args: ["version"]
@@ -17,6 +22,9 @@ commandTests:
     expectedOutput: ["18\\.09\\.\\d+"]
     exitCode: 1
 fileExistenceTests:
+  - name: 'aws'
+    path: '/usr/bin/aws'
+    shouldExist: true
   - name: 'skaffold'
     path: '/usr/bin/skaffold'
     shouldExist: true
