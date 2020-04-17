@@ -14,7 +14,7 @@ commandTests:
 
 fileExistenceTests:
   - name: 'keycloak plugin'
-    path: '/home/jenkins/.terraform.d/plugins/terraform-provider-keycloak_v1.17.1'
+    path: '/home/jenkins/.terraform.d/plugins/terraform-provider-keycloak_v1.18.0'
     shouldExist: true
     permissions: '-rwxr-xr-x'
     uid: 1000
