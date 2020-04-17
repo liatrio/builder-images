@@ -42,7 +42,7 @@ RUN addgroup -g 1000 jenkins && adduser -h /home/jenkins -G jenkins -u 1000 -D j
 USER jenkins
 WORKDIR /home/jenkins
 
-ENV TERRAFORM_PROVIDER_KEYCLOAK_VERSION 1.11.1
+ENV TERRAFORM_PROVIDER_KEYCLOAK_VERSION 1.17.1
 RUN curl -Lo terraform-provider-keycloak.zip https://github.com/mrparkers/terraform-provider-keycloak/releases/download/${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}/terraform-provider-keycloak_v${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}_linux_amd64_static.zip && \
     unzip -j terraform-provider-keycloak.zip && \
     rm -f terraform-provider-keycloak.zip && \

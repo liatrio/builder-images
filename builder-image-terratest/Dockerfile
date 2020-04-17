@@ -20,7 +20,7 @@ FROM alpine:3.11 AS TFPROVIDERS
 
 WORKDIR /plugins
 
-ENV TERRAFORM_PROVIDER_KEYCLOAK_VERSION 1.11.1
+ENV TERRAFORM_PROVIDER_KEYCLOAK_VERSION 1.17.1
 ADD https://github.com/mrparkers/terraform-provider-keycloak/releases/download/${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}/terraform-provider-keycloak_v${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}_linux_amd64_static.zip /
 RUN unzip -j /terraform-provider-keycloak_v${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}_linux_amd64_static.zip
 
