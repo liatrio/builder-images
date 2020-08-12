@@ -33,8 +33,8 @@ pipeline {
       }
       environment {
         GITOPS_GIT_URL = 'https://github.com/liatrio/lead-environments.git'
-        GITOPS_REPO_FILE = 'aws/liatrio-sandbox/terragrunt.hcl'
-        GITOPS_VALUES = "inputs.builder_images_version=${VERSION}:inputs.jenkins_image_version=${VERSION}"
+        GITOPS_REPO_FILE = 'aws/manifest.yml'
+        GITOPS_VALUES = "liatrio_sandbox.builder_images_version=${VERSION}:liatrio_sandbox.jenkins_image_version=${VERSION}"
       }
       steps {
         container('gitops') {
