@@ -8,7 +8,7 @@ RUN apk add --no-cache \
 		groff \
 		python3
 
-ENV SKAFFOLD_VERSION 1.8.0
+ENV SKAFFOLD_VERSION 1.15.0
 RUN curl -f -Lo skaffold https://github.com/GoogleCloudPlatform/skaffold/releases/download/v${SKAFFOLD_VERSION}/skaffold-linux-amd64 && \
   chmod +x skaffold && \
   mv skaffold /usr/bin && \
