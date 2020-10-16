@@ -9,7 +9,7 @@ commandTests:
   - name: "skaffold version"
     command: "skaffold"
     args: ["version"]
-    expectedOutput: ["v1\\.8\\.0"]
+    expectedOutput: ["v1\\.15\\.0"]
     exitCode: 0
   - name: "container-structure-test version"
     command: "container-structure-test"
