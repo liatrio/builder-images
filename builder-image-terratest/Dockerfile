@@ -3,7 +3,7 @@ FROM alpine:3.11 AS TERRAFORM
 
 RUN apk --no-cache add gpgme
 
-ENV TERRAFORM_VERSION 0.12.24
+ENV TERRAFORM_VERSION 0.14.8
 COPY sig/hashicorp.asc .
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip .
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS .
@@ -14,19 +14,6 @@ RUN gpg --import hashicorp.asc \
  && cat terraform_${TERRAFORM_VERSION}_SHA256SUMS | grep linux_amd64 | sha256sum -c \
  && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
  && chmod +x terraform
-
-# Download Keycloak && Harbor Terraform Providers
-FROM alpine:3.11 AS TFPROVIDERS
-
-WORKDIR /plugins
-
-ENV TERRAFORM_PROVIDER_KEYCLOAK_VERSION 1.18.0
-ADD https://github.com/mrparkers/terraform-provider-keycloak/releases/download/${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}/terraform-provider-keycloak_v${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}_linux_amd64_static.zip /
-RUN unzip -j /terraform-provider-keycloak_v${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}_linux_amd64_static.zip
-
-ENV TERRAFORM_PROVIDER_HARBOR_VERSION 0.1.0
-ADD https://github.com/liatrio/terraform-provider-harbor/releases/download/v${TERRAFORM_PROVIDER_HARBOR_VERSION}/terraform-provider-harbor_${TERRAFORM_PROVIDER_HARBOR_VERSION}_linux_amd64.zip /
-RUN unzip -j /terraform-provider-harbor_${TERRAFORM_PROVIDER_HARBOR_VERSION}_linux_amd64.zip -x "LICENSE"
 
 # Download and verify AWS IAM Authenticator
 FROM alpine:3.11 as AWS_IAM_AUTHENTICATOR
@@ -71,6 +58,3 @@ COPY --from=AWS_IAM_AUTHENTICATOR /aws-iam-authenticator /usr/bin/
 RUN addgroup -g 1000 jenkins && adduser -h /home/jenkins -G jenkins -u 1000 -D jenkins
 USER jenkins
 WORKDIR /home/jenkins
-
-## Install Terraform plugins
-COPY --chown=jenkins:jenkins --from=TFPROVIDERS /plugins/* /home/jenkins/.terraform.d/plugins/
