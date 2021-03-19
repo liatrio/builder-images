@@ -16,7 +16,7 @@ ENV PATH /go/bin:$PATH
 RUN mkdir -m 0777 ${GOPATH} ${GOPATH}/src ${GOPATH}/bin
 
 WORKDIR /tmp/
-ENV TERRAFORM_VERSION 0.12.24
+ENV TERRAFORM_VERSION 0.14.8
 COPY sig/hashicorp.asc /tmp/.
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip /tmp/
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS /tmp/
@@ -33,7 +33,7 @@ RUN apk --update add --virtual verify gpgme \
  && rm -rf /tmp/* \
  && rm -rf /var/cache/apk/*
 
-ENV TERRAGRUNT_VERSION 0.21.10
+ENV TERRAGRUNT_VERSION 0.28.14
 RUN curl -f -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 && \
   chmod +x terragrunt && \
   mv terragrunt /usr/bin
@@ -41,10 +41,3 @@ RUN curl -f -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/d
 RUN addgroup -g 1000 jenkins && adduser -h /home/jenkins -G jenkins -u 1000 -D jenkins
 USER jenkins
 WORKDIR /home/jenkins
-
-ENV TERRAFORM_PROVIDER_KEYCLOAK_VERSION 1.18.0
-RUN curl -Lo terraform-provider-keycloak.zip https://github.com/mrparkers/terraform-provider-keycloak/releases/download/${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}/terraform-provider-keycloak_v${TERRAFORM_PROVIDER_KEYCLOAK_VERSION}_linux_amd64_static.zip && \
-    unzip -j terraform-provider-keycloak.zip && \
-    rm -f terraform-provider-keycloak.zip && \
-    mkdir -p /home/jenkins/.terraform.d/plugins/ && \
-    mv terraform-provider-keycloak_v${TERRAFORM_PROVIDER_KEYCLOAK_VERSION} /home/jenkins/.terraform.d/plugins/

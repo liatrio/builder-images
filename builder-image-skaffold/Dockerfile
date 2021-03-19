@@ -14,7 +14,7 @@ RUN curl -f -Lo skaffold https://github.com/GoogleCloudPlatform/skaffold/release
   mv skaffold /usr/bin && \
   skaffold version
 
-RUN pip3 install awscli && \
+RUN pip3 install "awscli==1.18.*" && \
     aws --version
 
 ENV CST_VERSION 1.8.0

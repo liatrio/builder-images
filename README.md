@@ -16,7 +16,7 @@ This repo contains the source for builder images to be used as steps in CI/CD pi
 - [maven](builder-image-maven)
 - [ruby](builder-image-ruby)
 - [gradle](builder-image-gradle)
-- [gitops](builder-image-gitops)
+- [Gitty Up](builder-image-gitty-up)
 
 ### Testing
 Each directory for an image contains an image structure test to confirm that it will build correctly using the

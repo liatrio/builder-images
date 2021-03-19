@@ -18,8 +18,8 @@ build:
     context: ./builder-image-terraform
   - image: builder-image-terratest
     context: ./builder-image-terratest
-  - image: builder-image-gitops
-    context: ./builder-image-gitops
+  - image: builder-image-gitty-up
+    context: ./builder-image-gitty-up
   - image: builder-image-goreleaser
     context: ./builder-image-goreleaser
   - image: jenkins-image
