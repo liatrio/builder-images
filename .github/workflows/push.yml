@@ -13,8 +13,8 @@ jobs:
       uses: docker/login-action@v1
       with:
         registry: ghcr.io
-        username: chrisjblackburn
-        password: ${{ secrets.GITHUB_TOKEN }}
+        username: ${{ secrets.CR_USER }}
+        password: ${{ secrets.CR_PAT }}
     - id: skaffold
       uses: liatrio/github-actions/skaffold-build@master
       with:
