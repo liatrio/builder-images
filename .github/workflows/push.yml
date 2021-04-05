@@ -14,7 +14,7 @@ jobs:
       with:
         default_repo: ghcr.io/liatrio
         docker_registry: ghcr.io/liatrio
-        docker_username: chrisjblackburn
+        docker_username: ${{ github.repository_owner }}
         docker_password: ${{ secrets.GITHUB_TOKEN }}
     - id: gitops
       uses: liatrio/github-actions/gitty-up@master
