@@ -22,6 +22,8 @@ build:
     context: ./builder-image-gitty-up
   - image: builder-image-goreleaser
     context: ./builder-image-goreleaser
+  - image: builder-image-azure-terraform
+    context: ./builder-image-azure-terraform  
   - image: jenkins-image
     context: ./jenkins-image
 
