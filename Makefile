@@ -1,4 +1,4 @@
-export SKAFFOLD_DEFAULT_REPO?=artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio-dev
+export SKAFFOLD_DEFAULT_REPO?=ghcr.io/liatrio
 
 SKAFFOLD_FLAGS :=
 
