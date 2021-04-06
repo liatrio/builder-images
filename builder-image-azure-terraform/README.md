@@ -5,7 +5,7 @@ Image for applying a Terraform plan to an Azure environment.
 ## Tools
 
 - Azure CLI
-- GO: 1.15.8
+- GO: 1.16.3
 - YQ: 4.5.1
 - TFLINT: v0.24.1
 - TERRAFORM: 0.14.9

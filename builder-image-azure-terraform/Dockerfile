@@ -2,7 +2,7 @@ FROM debian:buster-slim
 
 LABEL org.opencontainers.image.source https://github.com/liatrio/builder-images
 
-ARG GO_VERSION=1.15.8
+ARG GO_VERSION=1.16.3
 ARG YQ_VERSION=4.5.1
 ARG TFLINT_VERSION=v0.24.1
 ARG TERRAFORM_VERSION=0.14.9
