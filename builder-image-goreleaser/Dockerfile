@@ -1,5 +1,7 @@
 FROM alpine:latest AS goreleaser
 
+LABEL org.opencontainers.image.source https://github.com/liatrio/builder-images
+
 RUN wget https://github.com/goreleaser/goreleaser/releases/download/v0.123.3/goreleaser_Linux_x86_64.tar.gz -O - | tar -xz
 
 FROM golang:1.13-alpine

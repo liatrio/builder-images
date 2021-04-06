@@ -1,5 +1,7 @@
 FROM alpine:3.9
 
+LABEL org.opencontainers.image.source https://github.com/liatrio/builder-images
+
 RUN apk add --no-cache \
     git \
     curl \
@@ -13,6 +15,7 @@ RUN apk add --no-cache \
 ENV GOROOT /usr/lib/go
 ENV GOPATH /go
 ENV PATH /go/bin:$PATH
+
 RUN mkdir -m 0777 ${GOPATH} ${GOPATH}/src ${GOPATH}/bin
 
 WORKDIR /tmp/

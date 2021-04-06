@@ -9,19 +9,13 @@ jobs:
     - uses: actions/checkout@v2
     - id: gitextra
       uses: liatrio/github-actions/git-extra@master
-    - uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
-        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-        role-duration-seconds: 1200
-    - id: ecr
-      uses: liatrio/github-actions/ecr@master
     - id: skaffold
       uses: liatrio/github-actions/skaffold-build@master
       with:
-        default_repo: ${{ steps.ecr.outputs.registry }}
+        default_repo: ghcr.io/liatrio
+        docker_registry: ghcr.io/liatrio
+        docker_username: ${{ github.repository_owner }}
+        docker_password: ${{ secrets.GITHUB_TOKEN }}
     - id: gitops
       uses: liatrio/github-actions/gitty-up@master
       if: github.ref == 'refs/heads/master'
