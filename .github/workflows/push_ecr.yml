@@ -1,4 +1,4 @@
-name: push
+name: push-jenkins-ecr
 
 env:
   REGISTRY: ghcr.io/liatrio
