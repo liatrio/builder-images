@@ -6,22 +6,11 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
-    - id: gitextra
-      uses: liatrio/github-actions/git-extra@master
-    - id: skaffold
-      uses: liatrio/github-actions/skaffold-build@master
-      with:
-        default_repo: ghcr.io/liatrio
-        docker_registry: ghcr.io/liatrio
-        docker_username: ${{ github.repository_owner }}
-        docker_password: ${{ secrets.GITHUB_TOKEN }}
-    - id: gitops
-      uses: liatrio/github-actions/gitty-up@master
-      if: github.ref == 'refs/heads/master'
-      with:
-        url: https://github.com/liatrio/lead-environments.git
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITTY_UP_TOKEN }}
-        file: aws/manifest.yml
-        values: liatrio_sandbox.builder_images_version=${{steps.gitextra.outputs.version}}:liatrio_sandbox.jenkins_image_version=${{steps.gitextra.outputs.version}}
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
