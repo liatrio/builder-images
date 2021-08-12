@@ -16,12 +16,12 @@ jobs:
         docker_registry: ghcr.io/liatrio
         docker_username: ${{ github.repository_owner }}
         docker_password: ${{ secrets.GITHUB_TOKEN }}
-    - id: gitops
-      uses: liatrio/github-actions/gitty-up@master
-      if: github.ref == 'refs/heads/master'
-      with:
-        url: https://github.com/liatrio/lead-environments.git
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITTY_UP_TOKEN }}
-        file: aws/manifest.yml
-        values: liatrio_sandbox.builder_images_version=${{steps.gitextra.outputs.version}}:liatrio_sandbox.jenkins_image_version=${{steps.gitextra.outputs.version}}
+    # - id: gitops
+    #   uses: liatrio/github-actions/gitty-up@master
+    #   if: github.ref == 'refs/heads/master'
+    #   with:
+    #     url: https://github.com/liatrio/lead-environments.git
+    #     username: ${{ github.actor }}
+    #     password: ${{ secrets.GITTY_UP_TOKEN }}
+    #     file: aws/manifest.yml
+    #     values: liatrio_sandbox.builder_images_version=${{steps.gitextra.outputs.version}}:liatrio_sandbox.jenkins_image_version=${{steps.gitextra.outputs.version}}
