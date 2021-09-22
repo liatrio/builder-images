@@ -26,6 +26,8 @@ build:
     context: ./builder-image-azure-terraform  
   - image: jenkins-image
     context: ./jenkins-image
+  - image: atlantis-image
+    context: ./atlantis-image
 
 test:
 - image: builder-image-aws
