@@ -1,0 +1,45 @@
+FROM summerwind/actions-runner:v2.279.0-ubuntu-20.04-743e6d6
+
+WORKDIR /usr/workspace
+
+# AWS CLI is needed to authenticate to EKS clusters, and to assume a role in CI
+ENV AWS_PAGER=""
+ENV AWS_REGION="us-east-1"
+RUN curl -LO https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip && \
+    unzip awscli-exe-linux-x86_64.zip && \
+    sudo ./aws/install && \
+    rm -rf aws awscliv2.zip && \
+    aws --version
+
+# Go is needed to run terraform tests via terratest
+ENV PATH="${PATH}:/usr/local/go/bin"
+ENV GO_VERSION="1.17.3"
+RUN curl -LO https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
+    sudo tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
+    rm go${GO_VERSION}.linux-amd64.tar.gz && \
+    go version
+
+ENV TERRAFORM_VERSION="1.0.11"
+RUN curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+    sudo mv ./terraform /usr/local/bin && \
+    rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+    terraform -version
+
+ENV TERRAGRUNT_VERSION="0.35.10"
+RUN curl -LO https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 && \
+    chmod +x ./terragrunt_linux_amd64 && \
+    sudo mv ./terragrunt_linux_amd64 /usr/local/bin/terragrunt && \
+    terragrunt --version
+
+ENV VCLUSTER_VERSION="0.4.3"
+RUN curl -LO https://github.com/loft-sh/vcluster/releases/download/v${VCLUSTER_VERSION}/vcluster-linux-amd64 && \
+    chmod +x ./vcluster-linux-amd64 && \
+    sudo mv ./vcluster-linux-amd64 /usr/local/bin/vcluster && \
+    vcluster --version
+
+ENV KUBECTL_VERSION="1.21.6"
+RUN curl -LO https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+    chmod +x ./kubectl && \
+    sudo mv ./kubectl /usr/local/bin && \
+    kubectl version --client
