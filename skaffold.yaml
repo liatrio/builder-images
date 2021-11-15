@@ -28,6 +28,8 @@ build:
     context: ./jenkins-image
   - image: atlantis-image
     context: ./atlantis-image
+  - image: runner-image-lead-terraform
+    context: ./runner-image-lead-terraform
 
 test:
 - image: builder-image-aws

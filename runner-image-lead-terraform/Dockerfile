@@ -1,5 +1,7 @@
 FROM summerwind/actions-runner:v2.279.0-ubuntu-20.04-743e6d6
 
+LABEL org.opencontainers.image.source https://github.com/liatrio/builder-images
+
 WORKDIR /usr/workspace
 
 # AWS CLI is needed to authenticate to EKS clusters, and to assume a role in CI
