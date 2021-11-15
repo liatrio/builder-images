@@ -23,11 +23,13 @@ build:
   - image: builder-image-goreleaser
     context: ./builder-image-goreleaser
   - image: builder-image-azure-terraform
-    context: ./builder-image-azure-terraform  
+    context: ./builder-image-azure-terraform
   - image: jenkins-image
     context: ./jenkins-image
   - image: atlantis-image
     context: ./atlantis-image
+  - image: runner-image-lead-terraform
+    context: ./runner-image-lead-terraform
 
 test:
 - image: builder-image-aws
