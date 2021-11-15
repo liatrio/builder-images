@@ -10,7 +10,7 @@ ENV AWS_REGION="us-east-1"
 RUN curl -LO https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip && \
     unzip awscli-exe-linux-x86_64.zip && \
     sudo ./aws/install && \
-    rm -rf aws awscliv2.zip && \
+    rm -rf aws awscli-exe-linux-x86_64.zip && \
     aws --version
 
 # Go is needed to run terraform tests via terratest
