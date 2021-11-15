@@ -25,7 +25,9 @@ Images are published to the Liatrio GitHub Container Registry (ghcr.io/liatrio) 
 
 [Gitty Up](builder-image-gitty-up)
 
-[Azure Terraform](builder-image-azure-terraform): Container for applying Terraform plan to Azure environment. 
+[Azure Terraform](builder-image-azure-terraform): Container for applying Terraform plan to Azure environment.
+
+[Azure Terraform](runner-image-lead-terraform): Container used for running tests within the lead-terraform pipeline. 
 
 ### Testing
 Each directory for an image contains an image structure test to confirm that it will build correctly using the
