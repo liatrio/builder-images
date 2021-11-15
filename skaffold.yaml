@@ -2,32 +2,32 @@ apiVersion: skaffold/v1beta13
 kind: Config
 build:
   artifacts:
-  - image: builder-image-aws
-    context: ./builder-image-aws
-  - image: builder-image-gradle
-    context: ./builder-image-gradle
-  - image: builder-image-ruby
-    context: ./builder-image-ruby
-  - image: builder-image-maven
-    context: ./builder-image-maven
-  - image: builder-image-openshift
-    context: ./builder-image-openshift
-  - image: builder-image-skaffold
-    context: ./builder-image-skaffold
-  - image: builder-image-terraform
-    context: ./builder-image-terraform
-  - image: builder-image-terratest
-    context: ./builder-image-terratest
-  - image: builder-image-gitty-up
-    context: ./builder-image-gitty-up
-  - image: builder-image-goreleaser
-    context: ./builder-image-goreleaser
-  - image: builder-image-azure-terraform
-    context: ./builder-image-azure-terraform  
-  - image: jenkins-image
-    context: ./jenkins-image
-  - image: atlantis-image
-    context: ./atlantis-image
+#  - image: builder-image-aws
+#    context: ./builder-image-aws
+#  - image: builder-image-gradle
+#    context: ./builder-image-gradle
+#  - image: builder-image-ruby
+#    context: ./builder-image-ruby
+#  - image: builder-image-maven
+#    context: ./builder-image-maven
+#  - image: builder-image-openshift
+#    context: ./builder-image-openshift
+#  - image: builder-image-skaffold
+#    context: ./builder-image-skaffold
+#  - image: builder-image-terraform
+#    context: ./builder-image-terraform
+#  - image: builder-image-terratest
+#    context: ./builder-image-terratest
+#  - image: builder-image-gitty-up
+#    context: ./builder-image-gitty-up
+#  - image: builder-image-goreleaser
+#    context: ./builder-image-goreleaser
+#  - image: builder-image-azure-terraform
+#    context: ./builder-image-azure-terraform
+#  - image: jenkins-image
+#    context: ./jenkins-image
+#  - image: atlantis-image
+#    context: ./atlantis-image
   - image: runner-image-lead-terraform
     context: ./runner-image-lead-terraform
 
