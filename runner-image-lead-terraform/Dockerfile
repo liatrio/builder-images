@@ -24,7 +24,7 @@ RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
     az extension add --system --name azure-devops && \
     az -v && \
     chown runner -R /home/runner
-         
+
 # Go is needed to run terraform tests via terratest
 ENV PATH="${PATH}:/usr/local/go/bin"
 ENV GO_VERSION="1.17.3"
