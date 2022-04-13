@@ -1,4 +1,4 @@
-FROM summerwind/actions-runner:v2.279.0-ubuntu-20.04-743e6d6
+FROM summerwind/actions-runner:v2.290.0-ubuntu-20.04-352e206
 
 LABEL org.opencontainers.image.source https://github.com/liatrio/builder-images
 
