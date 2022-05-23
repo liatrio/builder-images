@@ -1,4 +1,4 @@
-FROM alpine:3.9
+FROM alpine:3.15
 
 LABEL org.opencontainers.image.source https://github.com/liatrio/builder-images
 
@@ -19,7 +19,7 @@ ENV PATH /go/bin:$PATH
 RUN mkdir -m 0777 ${GOPATH} ${GOPATH}/src ${GOPATH}/bin
 
 WORKDIR /tmp/
-ENV TERRAFORM_VERSION 0.14.8
+ENV TERRAFORM_VERSION 1.2.0
 COPY sig/hashicorp.asc /tmp/.
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip /tmp/
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS /tmp/
@@ -36,7 +36,7 @@ RUN apk --update add --virtual verify gpgme \
  && rm -rf /tmp/* \
  && rm -rf /var/cache/apk/*
 
-ENV TERRAGRUNT_VERSION 0.28.14
+ENV TERRAGRUNT_VERSION 0.37.1
 RUN curl -f -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 && \
   chmod +x terragrunt && \
   mv terragrunt /usr/bin
