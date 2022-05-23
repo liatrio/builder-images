@@ -19,7 +19,8 @@ RUN apt-get update && apt-get install -yq \
     jq \
     lsb-release \
     wget \
-    zip
+    zip && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install yq
 RUN cd /tmp && \
@@ -35,6 +36,7 @@ RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
     echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | \
     tee /etc/apt/sources.list.d/azure-cli.list && \
     apt-get update && apt-get install -yq azure-cli && \
+    rm -rf /var/lib/apt/lists/* && \
     az extension add --system --name azure-devops && \
     az -v
 
