@@ -1,9 +1,9 @@
 # Download and verify Terraform
-FROM alpine:3.11 AS TERRAFORM
+FROM alpine:3.15 AS TERRAFORM
 
 RUN apk --no-cache add gpgme
 
-ENV TERRAFORM_VERSION 0.14.8
+ENV TERRAFORM_VERSION 1.2.0
 COPY sig/hashicorp.asc .
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip .
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS .
@@ -16,11 +16,11 @@ RUN gpg --import hashicorp.asc \
  && chmod +x terraform
 
 # Download and verify AWS IAM Authenticator
-FROM alpine:3.11 as AWS_IAM_AUTHENTICATOR
+FROM alpine:3.15 as AWS_IAM_AUTHENTICATOR
 
 RUN apk add --no-cache openssl
 
-ENV AWS_IAM_AUTHENTICATOR_VERSION 1.14.6/2019-08-22
+ENV AWS_IAM_AUTHENTICATOR_VERSION 1.21.2/2021-07-05
 ADD https://amazon-eks.s3-us-west-2.amazonaws.com/${AWS_IAM_AUTHENTICATOR_VERSION}/bin/linux/amd64/aws-iam-authenticator /
 ADD https://amazon-eks.s3-us-west-2.amazonaws.com/${AWS_IAM_AUTHENTICATOR_VERSION}/bin/linux/amd64/aws-iam-authenticator.sha256 /
 
@@ -47,7 +47,7 @@ RUN mkdir -m 0777 ${GOPATH} ${GOPATH}/src ${GOPATH}/bin
 COPY --from=TERRAFORM terraform /usr/bin
 
 ## Install Kubectl
-ENV KUBECTL_VERSION v1.17.0
+ENV KUBECTL_VERSION v1.24.0
 ADD https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl /usr/bin
 RUN chmod a+x /usr/bin/kubectl
 
