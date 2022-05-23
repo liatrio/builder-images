@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM ubuntu:22.04
 
 LABEL org.opencontainers.image.source https://github.com/liatrio/builder-images
 
