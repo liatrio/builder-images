@@ -4,7 +4,7 @@ commandTests:
   - name: "goreleaser"
     command: "goreleaser"
     args: ["--version"]
-    expectedError: ["version: \\d+\\.\\d+\\.\\d+"]
+    expectedOutput: ["^goreleaser version \\d+\\.\\d+\\.\\d+"]
     exitCode: 0
   - name: "libc"
     command: "gcc"

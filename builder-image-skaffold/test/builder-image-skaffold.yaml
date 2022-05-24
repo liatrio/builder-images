@@ -4,22 +4,22 @@ commandTests:
   - name: "aws test"
     command: "aws"
     args: ["--version"]
-    expectedOutput: ["1\\.18\\.\\d+"]
+    expectedOutput: ["1\\.24\\.\\d+"]
     exitCode: 0
   - name: "skaffold version"
     command: "skaffold"
     args: ["version"]
-    expectedOutput: ["v1\\.15\\.0"]
+    expectedOutput: ["v1\\.37\\.2"]
     exitCode: 0
   - name: "container-structure-test version"
     command: "container-structure-test"
     args: ["version"]
-    expectedOutput: ["v1\\.8\\.0"]
+    expectedOutput: ["v1\\.11\\.0"]
     exitCode: 0
-  - name: "docker version 18.09+"
+  - name: "docker version 20.10+"
     command: "docker"
     args: ["version"]
-    expectedOutput: ["18\\.09\\.\\d+"]
+    expectedOutput: ["20\\.10\\.\\d+"]
     exitCode: 1
 fileExistenceTests:
   - name: 'aws'

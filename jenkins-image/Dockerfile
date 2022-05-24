@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.289.3
+FROM jenkins/jenkins:2.348
 
 LABEL org.opencontainers.image.source https://github.com/liatrio/builder-images
 

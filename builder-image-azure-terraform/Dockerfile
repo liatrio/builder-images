@@ -1,12 +1,12 @@
-FROM debian:buster-slim
+FROM ubuntu:22.04
 
 LABEL org.opencontainers.image.source https://github.com/liatrio/builder-images
 
-ARG GO_VERSION=1.16.3
+ARG GO_VERSION=1.18.2
 ARG YQ_VERSION=4.5.1
-ARG TFLINT_VERSION=v0.24.1
-ARG TERRAFORM_VERSION=0.14.9
-ARG TERRAGRUNT_VERSION=v0.23.23
+ARG TFLINT_VERSION=v0.36.2
+ARG TERRAFORM_VERSION=1.2.1
+ARG TERRAGRUNT_VERSION=v0.37.1
  
 ENV PATH="$PATH:/usr/local/go/bin"
 
@@ -19,7 +19,8 @@ RUN apt-get update && apt-get install -yq \
     jq \
     lsb-release \
     wget \
-    zip
+    zip && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install yq
 RUN cd /tmp && \
@@ -35,6 +36,7 @@ RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
     echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | \
     tee /etc/apt/sources.list.d/azure-cli.list && \
     apt-get update && apt-get install -yq azure-cli && \
+    rm -rf /var/lib/apt/lists/* && \
     az extension add --system --name azure-devops && \
     az -v
 
