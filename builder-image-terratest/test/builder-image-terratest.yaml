@@ -9,12 +9,12 @@ commandTests:
   - name: "terraform version"
     command: "terraform"
     args: ["version"]
-    expectedOutput: ["Terraform v0\\.14\\.8"]
+    expectedOutput: ["Terraform v1\\.2\\.0"]
     exitCode: 0
   - name: "kubectl version"
     command: "kubectl"
     args: ["version", "--client"]
-    expectedOutput: ["Client Version: version\\.Info{Major:\"1\", Minor:\"17\""]
+    expectedOutput: ["Client Version: version\\.Info{Major:\"1\", Minor:\"24\""]
     exitCode: 0
   - name: "AWS IAM authenticator"
     command: "aws-iam-authenticator"
