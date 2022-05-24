@@ -19,7 +19,7 @@ ENV PATH /go/bin:$PATH
 RUN mkdir -m 0777 ${GOPATH} ${GOPATH}/src ${GOPATH}/bin
 
 WORKDIR /tmp/
-ENV TERRAFORM_VERSION 1.2.0
+ENV TERRAFORM_VERSION 1.2.1
 COPY sig/hashicorp.asc /tmp/.
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip /tmp/
 ADD https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS /tmp/

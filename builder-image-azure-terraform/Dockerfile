@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.source https://github.com/liatrio/builder-images
 ARG GO_VERSION=1.18.2
 ARG YQ_VERSION=4.5.1
 ARG TFLINT_VERSION=v0.36.2
-ARG TERRAFORM_VERSION=1.2.0
+ARG TERRAFORM_VERSION=1.2.1
 ARG TERRAGRUNT_VERSION=v0.37.1
  
 ENV PATH="$PATH:/usr/local/go/bin"

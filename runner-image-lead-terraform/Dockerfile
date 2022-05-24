@@ -33,7 +33,7 @@ RUN curl -LO https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
     rm go${GO_VERSION}.linux-amd64.tar.gz && \
     go version
 
-ENV TERRAFORM_VERSION="1.2.0"
+ENV TERRAFORM_VERSION="1.2.1"
 RUN curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     mv ./terraform /usr/local/bin && \
